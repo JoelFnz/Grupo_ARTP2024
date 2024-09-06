@@ -54,7 +54,8 @@ class Login : AppCompatActivity() {
         }
 
         btnRegistrarme.setOnClickListener{
-            TODO("Agregar en el login la conexión con registrar")
+            startActivity(Intent(this, RegistrarUsuario::class.java))
+            finish()
         }
 
     }
