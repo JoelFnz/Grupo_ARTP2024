@@ -1,6 +1,7 @@
 package com.example.grupoar_tp2024
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,12 +20,12 @@ class PokemonAdapter(var pokemones:MutableList<Pokemones>, var context:Context):
 
 
 
-init {
-    txtIDPoke = view.findViewById(R.id.tv_idPoke)
-    txtNombrePoke = view.findViewById(R.id.tv_nombrePoke)
-    txtTipoPoke = view.findViewById(R.id.tv_tipoPoke)
+        init {
+            txtIDPoke = view.findViewById(R.id.tv_idPoke)
+            txtNombrePoke = view.findViewById(R.id.tv_nombrePoke)
+            txtTipoPoke = view.findViewById(R.id.tv_tipoPoke)
 
-}
+        }
 
 
     }
@@ -42,7 +43,20 @@ init {
         val item= pokemones.get(position)
         holder.txtIDPoke.text= item.id.toString()
         holder.txtNombrePoke.text= item.nombre
-        holder.txtTipoPoke.text= item.tipo
+        holder.txtTipoPoke.text= item.tipo.joinToString(" - ")
+
+        holder.itemView.setOnClickListener{
+            val intent = Intent(context, PokeDetallesActivity::class.java)
+
+            intent.putExtra("id", item.id)
+            intent.putExtra("nombre", item.nombre)
+            intent.putExtra("tipo", item.tipo.joinToString(" - "))
+            intent.putExtra("movimientos", item.movimientos.joinToString(" - "))
+            intent.putExtra("region", item.region)
+
+            context.startActivity(intent)
+
+        }
 
     }
 
