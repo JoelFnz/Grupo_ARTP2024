@@ -27,6 +27,7 @@ class RegistrarUsuario : AppCompatActivity() {
         val etPasswordAgain = findViewById<EditText>(R.id.pass2TextEdit)
         val cbAgreement = findViewById<CheckBox>(R.id.checkBox)
         val btnRegister = findViewById<Button>(R.id.singUpButton)
+        val baseDeDatos = AppDatabase.getDatabase(applicationContext)
 
         btnRegister.setOnClickListener {
             val mail = etMail.text.toString()
@@ -34,16 +35,36 @@ class RegistrarUsuario : AppCompatActivity() {
             val passwordAgain = etPasswordAgain.text.toString()
             val isAgreed = cbAgreement.isChecked
 
-            if (mail.isNotEmpty() && password.isNotEmpty() && password == passwordAgain && isAgreed) {
-                Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show()
-                val intent = Intent (this, Login::class.java)
-                startActivity (intent)
-            } else {
+            if(mail.isEmpty() || password.isEmpty() || passwordAgain.isEmpty() || !isAgreed){
+                //Si algún campo está vacío entramos acá
                 Toast.makeText(
                     this,
                     "Por favor, llena todos los campos correctamente",
                     Toast.LENGTH_SHORT
                 ).show()
+            }
+            else if(baseDeDatos.usuarioRegistradoDao().existeUsuario(mail) > 0){
+                //Si existe un usuario con el mail ingresado entramos acá
+                Toast.makeText(this,
+                    "Ya existe un usuario registrado que utiliza ese correo electrónico",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            else if(password.length < 5){
+                Toast.makeText(this,
+                    "El largo de la contraseña debe ser mayor a 5 caracteres",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            else{
+                //Si no hay ningún problema hacemos el insert
+                baseDeDatos.usuarioRegistradoDao().insert(UsuarioRegistrado(mail, password))
+                Toast.makeText(
+                    this,
+                    "Registro exitoso", Toast.LENGTH_SHORT
+                ).show()
+                val intent = Intent (this, Login::class.java)
+                startActivity (intent)
             }
 
         }
