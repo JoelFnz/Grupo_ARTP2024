@@ -3,6 +3,7 @@ package com.example.grupoar_tp2024
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,8 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var rvPokemones: RecyclerView
     lateinit var pokemonAdapter: PokemonAdapter
+
+    lateinit var toolbar: Toolbar
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +25,10 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        toolbar=findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar!!.title= resources.getString(R.string.titulo)
 
         rvPokemones=findViewById(R.id.rvListaPokemones)
         pokemonAdapter = PokemonAdapter(getPokemones(), this)

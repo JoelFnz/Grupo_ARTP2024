@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
@@ -17,6 +18,8 @@ class PokeDetallesActivity : AppCompatActivity() {
     lateinit var txtMovimiento: TextView
     lateinit var txtRegion: TextView
 
+    lateinit var toolbar: Toolbar
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +30,10 @@ class PokeDetallesActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        // Obtener los datos del Intent
+
+        toolbar=findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar!!.title= resources.getString(R.string.titulo)
 
         txtNombre=findViewById(R.id.txtNombre)
         etId=findViewById(R.id.etId)

@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
@@ -21,6 +22,8 @@ class Login : AppCompatActivity() {
         lateinit var etContrasenia: EditText
         lateinit var cbRecordar: CheckBox
 
+        lateinit var toolbar: Toolbar
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
@@ -29,6 +32,10 @@ class Login : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        toolbar=findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar!!.title= resources.getString(R.string.titulo)
 
         btnIngresar = findViewById(R.id.btnIngresar)
         btnRegistrarme = findViewById(R.id.btnRegistrarme)
