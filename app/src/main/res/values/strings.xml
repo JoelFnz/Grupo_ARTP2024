@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">GrupoAR_TP2024</string>
     <string name="titulo">Pokémon</string>
+    <string name="item_BuscarPokemon">Buscar Pokémon</string>
+    <string name="item_Configuracion">Configuración</string>
+    <string name="item_AcercaDe">Acerca De</string>
 
 
 </resources>

@@ -1,6 +1,9 @@
 package com.example.grupoar_tp2024
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -35,6 +38,29 @@ class MainActivity : AppCompatActivity() {
 
         rvPokemones.adapter = pokemonAdapter
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            /* val intent = Intent(this, ::class.java)
+             startActivity(intent) */
+            R.id.item_BuscarPokemon ->{
+                Toast.makeText(this, "Busqueda en desarrollo", Toast.LENGTH_SHORT).show()
+            }
+            R.id.item_Configuracion ->{
+                Toast.makeText(this, "Configuración en desarrollo", Toast.LENGTH_SHORT).show()
+            }
+            R.id.item_AcercaDe ->{
+                Toast.makeText(this, "Acerca de en desarrollo", Toast.LENGTH_SHORT).show()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
 
     private fun getPokemones(): MutableList<Pokemones> {
         var pokemones: MutableList<Pokemones> = ArrayList()

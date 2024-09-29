@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/item_BuscarPokemon"
+        android:title="@string/item_BuscarPokemon"
+        app:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/item_Configuracion"
+        android:title="@string/item_Configuracion"
+        app:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/item_AcercaDe"
+        android:title="@string/item_AcercaDe"
+        app:showAsAction="never"
+        />
+
+</menu>
