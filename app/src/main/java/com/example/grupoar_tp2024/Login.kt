@@ -43,19 +43,13 @@ class Login : AppCompatActivity() {
         etContrasenia = findViewById(R.id.etContraseña)
         cbRecordar = findViewById(R.id.cbRecordar)
 
-        btnIngresar.setOnClickListener{
-            var email: String = etEmail.text.toString()
-            if(email.isNotEmpty() && etContrasenia.text.toString().isNotEmpty()){
-                if(cbRecordar.isChecked)
-                    Log.i("TODO", "CheckBox Recordar email")
+        var preferencias = getSharedPreferences(resources.getString(R.string.sp_credenciales),  MODE_PRIVATE)
+        var usuarioGuardado = preferencias.getString(resources.getString(R.string.nombre_usuario), "")
+        var passwordGuardado = preferencias.getString(resources.getString(R.string.password_usuario), "")
 
-                val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("EMAIL", email)
-                startActivity(intent)
-                finish()
-            }
-            else{
-                Toast.makeText(this, "Se deben completar todos los campos indicados", Toast.LENGTH_SHORT).show()
+        if (usuarioGuardado != "" && passwordGuardado != "") {
+            if (usuarioGuardado != null) {
+                startMainActivity(usuarioGuardado)
             }
 
         }
@@ -65,5 +59,30 @@ class Login : AppCompatActivity() {
             finish()
         }
 
+        btnIngresar.setOnClickListener {
+            var email = etEmail.text.toString()
+            var password = etContrasenia.text.toString()
+
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Se deben completar todos los campos indicados", Toast.LENGTH_SHORT).show()
+            } else {
+                if (cbRecordar.isChecked) {
+                    var preferencias = getSharedPreferences(resources.getString(R.string.sp_credenciales), MODE_PRIVATE)
+                    preferencias.edit().putString(resources.getString(R.string.nombre_usuario), email).apply()
+                    preferencias.edit().putString(resources.getString(R.string.password_usuario), password).apply()
+                }
+                startMainActivity(email)
+            }
+        }
+
+
+
+    }
+
+    private fun startMainActivity(email: String) {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra(resources.getString(R.string.nombre_usuario), email)
+        startActivity(intent)
+        finish()
     }
 }

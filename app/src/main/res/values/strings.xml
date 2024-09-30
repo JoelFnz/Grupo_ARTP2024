@@ -4,6 +4,8 @@
     <string name="item_BuscarPokemon">Buscar Pokémon</string>
     <string name="item_Configuracion">Configuración</string>
     <string name="item_AcercaDe">Acerca De</string>
-
+    <string name="nombre_usuario">NOMBRE</string>
+    <string name="password_usuario">PASSWORD</string>
+    <string name="sp_credenciales">SP_CREDENCIALES</string>
 
 </resources>
