@@ -13,8 +13,23 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
+
 class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
+
+   //LIBERADOR RECORDAR USUARIO
+        /*
+   val preferenciasLimpiar = getSharedPreferences(resources.getString(R.string.sp_credenciales), MODE_PRIVATE)
+   with(preferenciasLimpiar.edit()) {
+       clear()
+       apply()
+   }
+*/
+
+
+
 
         lateinit var btnIngresar: Button
         lateinit var btnRegistrarme: Button
@@ -23,6 +38,8 @@ class Login : AppCompatActivity() {
         lateinit var cbRecordar: CheckBox
 
         lateinit var toolbar: Toolbar
+
+
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -43,40 +60,56 @@ class Login : AppCompatActivity() {
         etContrasenia = findViewById(R.id.etContraseña)
         cbRecordar = findViewById(R.id.cbRecordar)
 
-        var preferencias = getSharedPreferences(resources.getString(R.string.sp_credenciales),  MODE_PRIVATE)
-        var usuarioGuardado = preferencias.getString(resources.getString(R.string.nombre_usuario), "")
-        var passwordGuardado = preferencias.getString(resources.getString(R.string.password_usuario), "")
+        val baseDeDatos = AppDatabase.getDatabase(applicationContext)
+
+
+
+
+
+        val preferencias = getSharedPreferences(resources.getString(R.string.sp_credenciales), MODE_PRIVATE)
+        val usuarioGuardado = preferencias.getString(resources.getString(R.string.nombre_usuario), "")
+        val passwordGuardado = preferencias.getString(resources.getString(R.string.password_usuario), "")
+
+
+
 
         if (usuarioGuardado != "" && passwordGuardado != "") {
             if (usuarioGuardado != null) {
                 startMainActivity(usuarioGuardado)
             }
-
         }
-
         btnRegistrarme.setOnClickListener{
             startActivity(Intent(this, RegistrarUsuario::class.java))
             finish()
         }
 
+
+
+
+
         btnIngresar.setOnClickListener {
-            var email = etEmail.text.toString()
-            var password = etContrasenia.text.toString()
+            val email = etEmail.text.toString()
+            val password = etContrasenia.text.toString()
 
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Se deben completar todos los campos indicados", Toast.LENGTH_SHORT).show()
+            } else if (password.length<5){
+                    Toast.makeText(this,"La contraseña debe ser mayor a 5 caracteres",Toast.LENGTH_SHORT).show()
             } else {
-                if (cbRecordar.isChecked) {
-                    var preferencias = getSharedPreferences(resources.getString(R.string.sp_credenciales), MODE_PRIVATE)
-                    preferencias.edit().putString(resources.getString(R.string.nombre_usuario), email).apply()
-                    preferencias.edit().putString(resources.getString(R.string.password_usuario), password).apply()
+                val usuarioCount = baseDeDatos.usuarioRegistradoDao().validarUsuario(email, password)
+
+                if (usuarioCount > 0) {
+                    if (cbRecordar.isChecked) {
+                        val preferencias = getSharedPreferences(resources.getString(R.string.sp_credenciales), MODE_PRIVATE)
+                        preferencias.edit().putString(resources.getString(R.string.nombre_usuario), email).apply()
+                        preferencias.edit().putString(resources.getString(R.string.password_usuario), password).apply()
+                    }
+                    startMainActivity(email)
+                } else {
+                    Toast.makeText(this, "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
                 }
-                startMainActivity(email)
             }
         }
-
-
-
     }
 
     private fun startMainActivity(email: String) {
@@ -85,4 +118,6 @@ class Login : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+
+
 }
