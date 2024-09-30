@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.item_AcercaDe -> {
-                Toast.makeText(this, "Acerca de en desarrollo", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Acerca De en desarrollo", Toast.LENGTH_SHORT).show()
             }
         }
         return super.onOptionsItemSelected(item)

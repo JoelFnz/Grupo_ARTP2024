@@ -5,19 +5,21 @@
     <item
         android:id="@+id/item_BuscarPokemon"
         android:title="@string/item_BuscarPokemon"
-        app:showAsAction="never"
+        android:icon="@drawable/baseline_search_24"
+        app:showAsAction="always"
         />
 
     <item
         android:id="@+id/item_Configuracion"
         android:title="@string/item_Configuracion"
-        app:showAsAction="never"
+        android:icon="@drawable/baseline_settings_24"
+        app:showAsAction="always"
         />
 
     <item
         android:id="@+id/item_AcercaDe"
         android:title="@string/item_AcercaDe"
-        app:showAsAction="never"
-        />
+        android:icon="@drawable/baseline_catching_pokemon_24"
+        app:showAsAction="always" />
 
 </menu>
