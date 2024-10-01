@@ -1,4 +1,4 @@
-package com.example.grupoar_tp2024
+package com.example.grupoar_tp2024.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.grupoar_tp2024.bd.AppDatabase
+import com.example.grupoar_tp2024.R
+import com.example.grupoar_tp2024.bd.UsuarioRegistrado
 
 class RegistrarUsuario : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,17 +25,16 @@ class RegistrarUsuario : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
+        //Layout
         val etMail = findViewById<EditText>(R.id.mailTextEdit)
         val etPassword = findViewById<EditText>(R.id.passTextEdit)
         val etPasswordAgain = findViewById<EditText>(R.id.pass2TextEdit)
         val cbAgreement = findViewById<CheckBox>(R.id.checkBox)
         val btnRegister = findViewById<Button>(R.id.singUpButton)
+        //BD
         val baseDeDatos = AppDatabase.getDatabase(applicationContext)
-
-        lateinit var toolbar: Toolbar
-
-        toolbar=findViewById(R.id.toolbar)
+        //Toolbar
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar!!.title= resources.getString(R.string.titulo)
 

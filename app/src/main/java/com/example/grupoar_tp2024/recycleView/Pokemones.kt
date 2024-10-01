@@ -1,4 +1,4 @@
-package com.example.grupoar_tp2024
+package com.example.grupoar_tp2024.recycleView
 
 data class Pokemones(
     var id: Int,

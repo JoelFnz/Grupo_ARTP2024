@@ -1,4 +1,4 @@
-package com.example.grupoar_tp2024
+package com.example.grupoar_tp2024.activities
 
 import android.os.Bundle
 import android.view.Menu
@@ -10,6 +10,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.grupoar_tp2024.recycleView.PokemonAdapter
+import com.example.grupoar_tp2024.recycleView.Pokemones
+import com.example.grupoar_tp2024.R
 
 class MainActivity : AppCompatActivity() {
 

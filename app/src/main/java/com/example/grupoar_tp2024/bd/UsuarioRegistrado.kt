@@ -1,4 +1,4 @@
-package com.example.grupoar_tp2024
+package com.example.grupoar_tp2024.bd
 
 import androidx.room.*;
 

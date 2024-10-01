@@ -1,4 +1,4 @@
-package com.example.grupoar_tp2024
+package com.example.grupoar_tp2024.recycleView
 
 import android.content.Context
 import android.content.Intent
@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.grupoar_tp2024.R
+import com.example.grupoar_tp2024.activities.PokeDetallesActivity
 
 class PokemonAdapter(var pokemones:MutableList<Pokemones>, var context:Context):
     RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() {

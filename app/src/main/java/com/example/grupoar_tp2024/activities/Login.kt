@@ -1,8 +1,7 @@
-package com.example.grupoar_tp2024
+package com.example.grupoar_tp2024.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
@@ -12,34 +11,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.grupoar_tp2024.bd.AppDatabase
+import com.example.grupoar_tp2024.R
 
 
 class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
-
-   //LIBERADOR RECORDAR USUARIO
-        /*
-   val preferenciasLimpiar = getSharedPreferences(resources.getString(R.string.sp_credenciales), MODE_PRIVATE)
-   with(preferenciasLimpiar.edit()) {
-       clear()
-       apply()
-   }
-*/
-
-
-
-
-        lateinit var btnIngresar: Button
-        lateinit var btnRegistrarme: Button
-        lateinit var etEmail: EditText
-        lateinit var etContrasenia: EditText
-        lateinit var cbRecordar: CheckBox
-
-        lateinit var toolbar: Toolbar
-
-
+        //LIBERADOR RECORDAR USUARIO
+        /* val preferenciasLimpiar = getSharedPreferences(resources.getString(R.string.sp_credenciales), MODE_PRIVATE)
+        with(preferenciasLimpiar.edit()) {
+            clear()
+            apply()
+        } */
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -50,65 +33,53 @@ class Login : AppCompatActivity() {
             insets
         }
 
-        toolbar=findViewById(R.id.toolbar)
+        //Toolbar
+        val toolbar: Toolbar =findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar!!.title= resources.getString(R.string.titulo)
-
-        btnIngresar = findViewById(R.id.btnIngresar)
-        btnRegistrarme = findViewById(R.id.btnRegistrarme)
-        etEmail = findViewById(R.id.etEmail)
-        etContrasenia = findViewById(R.id.etContraseña)
-        cbRecordar = findViewById(R.id.cbRecordar)
-
+        //Layout
+        val btnIngresar: Button = findViewById(R.id.btnIngresar)
+        val btnRegistrarme: Button = findViewById(R.id.btnRegistrarme)
+        val etEmail: EditText = findViewById(R.id.etEmail)
+        val etContrasenia: EditText = findViewById(R.id.etContraseña)
+        val cbRecordar: CheckBox = findViewById(R.id.cbRecordar)
+        //BD
         val baseDeDatos = AppDatabase.getDatabase(applicationContext)
-
-
-
-
-
+        //SharedPreferences para recordar usuario
         val preferencias = getSharedPreferences(resources.getString(R.string.sp_credenciales), MODE_PRIVATE)
         val usuarioGuardado = preferencias.getString(resources.getString(R.string.nombre_usuario), "")
         val passwordGuardado = preferencias.getString(resources.getString(R.string.password_usuario), "")
 
+        if (usuarioGuardado != "" && passwordGuardado != "" && usuarioGuardado != null)
+            startMainActivity(usuarioGuardado)
 
-
-
-        if (usuarioGuardado != "" && passwordGuardado != "") {
-            if (usuarioGuardado != null) {
-                startMainActivity(usuarioGuardado)
-            }
-        }
         btnRegistrarme.setOnClickListener{
             startActivity(Intent(this, RegistrarUsuario::class.java))
             finish()
         }
 
-
-
-
-
         btnIngresar.setOnClickListener {
             val email = etEmail.text.toString()
             val password = etContrasenia.text.toString()
+            var usuarioCount = 0
 
-            if (email.isEmpty() || password.isEmpty()) {
+            if(email.isNotEmpty() && password.isNotEmpty())
+                usuarioCount = baseDeDatos.usuarioRegistradoDao().validarUsuario(email, password)
+
+            if (email.isEmpty() || password.isEmpty())
                 Toast.makeText(this, "Se deben completar todos los campos indicados", Toast.LENGTH_SHORT).show()
-            } else if (password.length<5){
-                    Toast.makeText(this,"La contraseña debe ser mayor a 5 caracteres",Toast.LENGTH_SHORT).show()
-            } else {
-                val usuarioCount = baseDeDatos.usuarioRegistradoDao().validarUsuario(email, password)
 
-                if (usuarioCount > 0) {
-                    if (cbRecordar.isChecked) {
-                        val preferencias = getSharedPreferences(resources.getString(R.string.sp_credenciales), MODE_PRIVATE)
-                        preferencias.edit().putString(resources.getString(R.string.nombre_usuario), email).apply()
-                        preferencias.edit().putString(resources.getString(R.string.password_usuario), password).apply()
-                    }
-                    startMainActivity(email)
-                } else {
-                    Toast.makeText(this, "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
+            if (password.isNotEmpty() && password.length<5)
+                    Toast.makeText(this,"La contraseña debe ser mayor a 5 caracteres",Toast.LENGTH_SHORT).show()
+
+            if (usuarioCount > 0) {
+                if (cbRecordar.isChecked) {
+                    preferencias.edit().putString(resources.getString(R.string.nombre_usuario), email).apply()
+                    preferencias.edit().putString(resources.getString(R.string.password_usuario), password).apply()
                 }
-            }
+                startMainActivity(email)
+            } else
+                Toast.makeText(this, "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -118,6 +89,5 @@ class Login : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-
 
 }
