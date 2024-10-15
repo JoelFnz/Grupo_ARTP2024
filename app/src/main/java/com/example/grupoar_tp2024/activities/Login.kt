@@ -2,9 +2,11 @@ package com.example.grupoar_tp2024.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +15,15 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.grupoar_tp2024.bd.AppDatabase
 import com.example.grupoar_tp2024.R
-
+import com.example.grupoar_tp2024.apiRest.IPokemonApi
+import com.example.grupoar_tp2024.apiRest.PokemonDTO
+import com.example.grupoar_tp2024.apiRest.RetrofitClient
+import org.w3c.dom.Text
+import retrofit2.*
+import androidx.lifecycle.lifecycleScope
+import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +59,14 @@ class Login : AppCompatActivity() {
         val preferencias = getSharedPreferences(resources.getString(R.string.sp_credenciales), MODE_PRIVATE)
         val usuarioGuardado = preferencias.getString(resources.getString(R.string.nombre_usuario), "")
         val passwordGuardado = preferencias.getString(resources.getString(R.string.password_usuario), "")
+
+        //BORRAR ESTO
+        val tvPokemon: TextView = findViewById(R.id.pokemon)
+        val api = RetrofitClient.retrofit.create(IPokemonApi::class.java)
+        lifecycleScope.launch(Dispatchers.Main) {
+            val callGetPokemon = api.getPokemonPorNombre("ditto")
+            tvPokemon.text = callGetPokemon.toString()
+        }
 
         if (usuarioGuardado != "" && passwordGuardado != "" && usuarioGuardado != null)
             startMainActivity(usuarioGuardado)
