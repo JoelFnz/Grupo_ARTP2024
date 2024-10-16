@@ -1,36 +1,70 @@
 package com.example.grupoar_tp2024.apiRest
 
 import com.squareup.moshi.JsonClass
-import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
-
-/*
-    Por el momento la clase pokemon solo contiene de atributo el forms.
-    Hay que seguir agregando atributos de la api. Busquen un pokemon en la pagina y van
-    a ver los atributos.
-
-    Los nombres de los atributos no tienen que ser los mismos que los del json, pero
-    hay que agregarle la etiqueta @SerializedName("nombre del atributo original") para que
-    el programa no explote(!!).
-
-    Si ven que un atributo del json es del formato atributo: {otros atributos...} es porque es un objeto.
-    Creen una clase con los atributos que hay entre corchetes para que no explote(!!!).
- */
 
 //ESTA CLASE ES LA IMPORTANTE.
 @JsonClass (generateAdapter = true)
 data class PokemonDTO(
-    @SerializedName("forms") var forms : List<Form>
-) {
-    override fun toString(): String {
-        return "Nombre: " + forms.get(0).name
-    }
-}
+    val name: String,
+    val id: Int,
+    val weight: Int,
+    val height: Int,
+    val types: List<TypeSlot>,
+    val sprites: Sprite,
+    val cries: Cry,
+    val moves: List<MoveDetails>,
+    val abilities: List<AbilityDetails>
+)
 
 //CLASES COMPLEMENTARIAS
-data class Form(
+data class Type(
     val name: String,
     val url: String
 )
+
+data class TypeSlot(
+    val slot: Int,
+    val type: Type
+)
+
+data class Ability(
+    val name: String,
+    val url: String
+)
+
+data class AbilityDetails(
+    val ability: Ability,
+    val is_hidden: Boolean,
+    val slot: Int
+)
+
+data class Cry(
+    //Son urls
+    val latest: String,
+    val legacy: String
+)
+
+data class Move(
+    val name: String,
+    val url: String
+)
+
+data class MoveDetails(
+    val move: Move
+)
+
+data class Sprite(
+    //Todos son urls a imagenes
+    val back_default: String?,
+    val back_female: String?,
+    val back_shiny: String?,
+    val back_shiny_female: String?,
+    val front_default: String?,
+    val front_female: String?,
+    val front_shiny: String?,
+    val front_shiny_female: String?
+)
+
 
 

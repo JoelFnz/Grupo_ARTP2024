@@ -21,11 +21,15 @@ import com.example.grupoar_tp2024.apiRest.RetrofitClient
 import org.w3c.dom.Text
 import retrofit2.*
 import androidx.lifecycle.lifecycleScope
+import com.example.grupoar_tp2024.apiRest.ResultadoDTO
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class Login : AppCompatActivity() {
+
+    val api = RetrofitClient.retrofit.create(IPokemonApi::class.java)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         //LIBERADOR RECORDAR USUARIO
         /* val preferenciasLimpiar = getSharedPreferences(resources.getString(R.string.sp_credenciales), MODE_PRIVATE)
@@ -60,13 +64,18 @@ class Login : AppCompatActivity() {
         val usuarioGuardado = preferencias.getString(resources.getString(R.string.nombre_usuario), "")
         val passwordGuardado = preferencias.getString(resources.getString(R.string.password_usuario), "")
 
-        //BORRAR ESTO
         val tvPokemon: TextView = findViewById(R.id.pokemon)
-        val api = RetrofitClient.retrofit.create(IPokemonApi::class.java)
-        lifecycleScope.launch(Dispatchers.Main) {
-            val callGetPokemon = api.getPokemonPorNombre("ditto")
-            tvPokemon.text = callGetPokemon.toString()
-        }
+        val consulta = api.getPokemonPorUrl("https://pokeapi.co/api/v2/pokemon/1/")
+        consulta.enqueue(object : Callback<PokemonDTO>{
+            override fun onResponse(p0: Call<PokemonDTO>, p1: Response<PokemonDTO>) {
+                tvPokemon.text = p1.body().toString()
+            }
+
+            override fun onFailure(p0: Call<PokemonDTO>, p1: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
 
         if (usuarioGuardado != "" && passwordGuardado != "" && usuarioGuardado != null)
             startMainActivity(usuarioGuardado)
