@@ -13,14 +13,6 @@ import com.example.grupoar_tp2024.R
 
 class PokeDetallesActivity : AppCompatActivity() {
 
-    lateinit var txtNombre: TextView
-    lateinit var etId: TextView
-    lateinit var txtTipo: TextView
-    lateinit var txtMovimiento: TextView
-    lateinit var txtRegion: TextView
-
-    lateinit var toolbar: Toolbar
-
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,27 +24,22 @@ class PokeDetallesActivity : AppCompatActivity() {
             insets
         }
 
-        toolbar=findViewById(R.id.toolbar)
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar!!.title= resources.getString(R.string.titulo)
 
-        txtNombre=findViewById(R.id.txtNombre)
-        etId=findViewById(R.id.etId)
-        txtTipo=findViewById(R.id.txtTipo)
-        txtMovimiento=findViewById(R.id.txtMovimiento)
-        txtRegion=findViewById(R.id.txtRegion)
+        val txtNombre: TextView = findViewById(R.id.txtNombre)
+        val etId: TextView = findViewById(R.id.etId)
+        val txtTipo: TextView = findViewById(R.id.txtTipo)
+        val txtMovimiento: TextView = findViewById(R.id.txtMovimiento)
+        val txtHabilidades: TextView = findViewById(R.id.txtHabilidades)
 
-        val nombre = intent.getStringExtra("nombre")
-        val id = intent.getIntExtra("id", -1)
-        val tipo= intent.getStringExtra("tipo")
-        val movimientos = intent.getStringExtra("movimientos")
-        val region = intent.getStringExtra("region")
-
-        txtNombre.text = nombre
-        etId.text = id.toString()
-        txtTipo.text = tipo
-        txtMovimiento.text = movimientos
-        txtRegion.text = region
+        txtNombre.text = intent.getStringExtra("nombre")
+        etId.text = "ID: ${intent.getIntExtra("id", -1)}"
+        txtTipo.text = intent.getStringExtra("tipo")
+        txtMovimiento.text = intent.getStringExtra("movimientos")
+        txtHabilidades.text = intent.getStringExtra("habilidades")
+        //txtRegion.text = region
 
     }
 }

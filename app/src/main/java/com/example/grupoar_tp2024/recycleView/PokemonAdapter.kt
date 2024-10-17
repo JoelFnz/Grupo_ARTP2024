@@ -48,10 +48,15 @@ class PokemonAdapter(var pokemones:MutableList<PokemonDTO>, var context:Context)
         holder.itemView.setOnClickListener{
             val intent = Intent(context, PokeDetallesActivity::class.java)
 
-            intent.putExtra("id", item.id.toString())
+            intent.putExtra("id", item.id) //Int
             intent.putExtra("nombre", item.name)
             intent.putExtra("tipo", item.types.toString())
             intent.putExtra("movimientos", item.moves.toString())
+            intent.putExtra("habilidades", item.abilities.toString())
+            intent.putExtra("peso", item.weight) //Int
+            intent.putExtra("altura", item.height) //Int
+            intent.putExtra("sprites", item.sprites.toString()) //Son urls en un string delimitadas por ', '
+            intent.putExtra("gritos", item.cries.toString()) //Lo mismo aca
 
             context.startActivity(intent)
 

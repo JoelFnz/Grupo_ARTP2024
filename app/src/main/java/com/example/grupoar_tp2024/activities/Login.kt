@@ -64,19 +64,6 @@ class Login : AppCompatActivity() {
         val usuarioGuardado = preferencias.getString(resources.getString(R.string.nombre_usuario), "")
         val passwordGuardado = preferencias.getString(resources.getString(R.string.password_usuario), "")
 
-        val tvPokemon: TextView = findViewById(R.id.pokemon)
-        val consulta = api.getPokemonPorUrl("https://pokeapi.co/api/v2/pokemon/1/")
-        consulta.enqueue(object : Callback<PokemonDTO>{
-            override fun onResponse(p0: Call<PokemonDTO>, p1: Response<PokemonDTO>) {
-                tvPokemon.text = p1.body().toString()
-            }
-
-            override fun onFailure(p0: Call<PokemonDTO>, p1: Throwable) {
-                TODO("Not yet implemented")
-            }
-
-        })
-
         if (usuarioGuardado != "" && passwordGuardado != "" && usuarioGuardado != null)
             startMainActivity(usuarioGuardado)
 

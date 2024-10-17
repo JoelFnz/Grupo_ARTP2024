@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.PokeDetallesActivity"
-    android:orientation="vertical"
     >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
     <include
         android:id="@+id/toolbar"
@@ -23,15 +27,8 @@
         />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ID"
-        android:gravity="center_horizontal"
-        android:textSize="25sp"
-        />
-
-    <TextView
         android:id="@+id/etId"
+        android:text="ID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp"
@@ -57,9 +54,25 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Habilidad"
         android:gravity="center_horizontal"
         android:textSize="25sp"
+        android:text = "Habilidades"
+        />
+
+    <TextView
+        android:id="@+id/txtHabilidades"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="25sp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="25sp"
+        android:text ="Movimientos"
         />
 
     <TextView
@@ -70,20 +83,6 @@
         android:gravity="center_horizontal"
         />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Region"
-        android:gravity="center_horizontal"
-        android:textSize="25sp"
-        />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/txtRegion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:gravity="center_horizontal"
-        />
-
-</LinearLayout>
+</ScrollView>

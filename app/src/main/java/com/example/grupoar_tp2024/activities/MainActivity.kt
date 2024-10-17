@@ -12,7 +12,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.grupoar_tp2024.recycleView.PokemonAdapter
-import com.example.grupoar_tp2024.recycleView.Pokemones
 import com.example.grupoar_tp2024.R
 import com.example.grupoar_tp2024.apiRest.IPokemonApi
 import com.example.grupoar_tp2024.apiRest.PokemonDTO
@@ -55,6 +54,8 @@ class MainActivity : AppCompatActivity() {
             // Actualiza la lista en el adaptador
             pokemonAdapter.updateData(pokemons)
         }
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
