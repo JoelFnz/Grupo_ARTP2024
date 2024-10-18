@@ -12,9 +12,8 @@ interface IPokemonApi {
 
     @GET("pokemon")
     fun getPokemonPorIdEnRango(
-        @Query("offset") desde: Int,
-        @Query("limit") hasta: Int) : Call<ResultadoDTO>
-    //Basicamente obtenes urls de pokemones con id en el rango definido (desde > id > hasta)
+        @Query("offset") inicio: Int,
+        @Query("limit") cantidadAObtener: Int) : Call<ResultadoDTO>
 
     @GET
     fun getPokemonPorUrl(@Url url: String): Call<PokemonDTO>

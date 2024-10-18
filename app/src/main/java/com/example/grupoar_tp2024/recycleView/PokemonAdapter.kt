@@ -66,8 +66,10 @@ class PokemonAdapter(var pokemones:MutableList<PokemonDTO>, var context:Context)
 
     fun updateData(newPokemons: MutableList<PokemonDTO>) {
         pokemones = newPokemons
+        pokemones.sortBy { it.id }
         notifyDataSetChanged()  // Notifica que los datos han cambiado
     }
+
 
 }
 
