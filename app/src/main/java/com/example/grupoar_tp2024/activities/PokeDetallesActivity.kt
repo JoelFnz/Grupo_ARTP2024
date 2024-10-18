@@ -52,12 +52,12 @@ class PokeDetallesActivity : AppCompatActivity() {
 
 
             if (spriteUrls.isNotEmpty()) {
-                Picasso.get().load(spriteUrls[0]).into(imgBack)
+                Picasso.get().load(spriteUrls[0]).into(imgBack) // de atras
             }
 
 
             if (spriteUrls.size > 4) {
-                Picasso.get().load(spriteUrls[4]).into(imgFront)
+                Picasso.get().load(spriteUrls[4]).into(imgFront) // de frente
             }
         }
 
