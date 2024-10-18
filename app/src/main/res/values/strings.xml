@@ -7,5 +7,31 @@
     <string name="nombre_usuario">NOMBRE</string>
     <string name="password_usuario">PASSWORD</string>
     <string name="sp_credenciales">SP_CREDENCIALES</string>
+    <string name="terminos_condiciones">Términos y Condiciones de Uso de la Pokédex \n
+Fecha de entrada en vigor: 21/10/2024 \n
 
+1. Aceptación de los Términos
+Al descargar, instalar o utilizar la aplicación Pokédex, usted acepta cumplir con estos términos y condiciones. Si no está de acuerdo con alguna parte de estos términos, no debe utilizar la aplicación.
+\n
+2. Uso de la Aplicación
+La aplicación Pokédex se proporciona solo con fines informativos. No garantizamos la exactitud, integridad o actualidad de la información presentada en la aplicación. El uso de la aplicación es bajo su propio riesgo.
+\n
+3. Propiedad Intelectual
+Todos los derechos de propiedad intelectual, incluidos, entre otros, derechos de autor, marcas comerciales y patentes, relacionados con la aplicación y su contenido pertenecen al Grupo 14 de App Moviles o a sus respectivos propietarios. No se permite la copia, reproducción o distribución de cualquier parte de la aplicación sin el permiso expreso del propietario.
+\n
+4. Modificaciones a los Términos
+Nos reservamos el derecho de modificar estos términos en cualquier momento. Cualquier cambio se publicará en esta sección y su uso continuado de la aplicación constituirá su aceptación de dichos cambios.
+\n
+5. Limitación de Responsabilidad
+En la medida máxima permitida por la ley, [Nombre del Desarrollador] no será responsable de ningún daño directo, indirecto, incidental, especial, consecuente o punitivo que surja de su uso o incapacidad para usar la aplicación.
+\n
+6. Enlaces a Sitios de Terceros
+La aplicación puede contener enlaces a sitios web de terceros. No somos responsables del contenido de estos sitios y no respaldamos ni garantizamos la precisión de la información en ellos.
+\n
+7. Legislación Aplicable
+Estos términos se regirán e interpretarán de acuerdo con las leyes del Argentina sin tener en cuenta sus principios de conflicto de leyes.
+\n
+8. Contacto
+Si tiene preguntas sobre estos términos, contáctenos en Grupo 14 Sistemas.</string>
+    \n
 </resources>

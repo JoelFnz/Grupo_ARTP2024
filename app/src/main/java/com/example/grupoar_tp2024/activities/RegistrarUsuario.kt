@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +32,7 @@ class RegistrarUsuario : AppCompatActivity() {
         val etPasswordAgain = findViewById<EditText>(R.id.pass2TextEdit)
         val cbAgreement = findViewById<CheckBox>(R.id.checkBox)
         val btnRegister = findViewById<Button>(R.id.singUpButton)
+        val terminosCondicionesTextView= findViewById<TextView>(R.id.terminos_condiciones)
         //BD
         val baseDeDatos = AppDatabase.getDatabase(applicationContext)
         //Toolbar
@@ -77,6 +79,13 @@ class RegistrarUsuario : AppCompatActivity() {
             }
 
         }
+
+
+        terminosCondicionesTextView.setOnClickListener {
+            val dialog = TerminosCondiciones()
+            dialog.show(supportFragmentManager, "TerminosCondiciones")
+        }
+
 
     }
 }
