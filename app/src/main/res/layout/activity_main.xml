@@ -52,6 +52,7 @@
 
     </LinearLayout>
 
+    <!-- recycleView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvListaPokemones"
         android:layout_width="match_parent"
