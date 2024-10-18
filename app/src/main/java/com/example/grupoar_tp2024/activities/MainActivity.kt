@@ -1,9 +1,11 @@
 package com.example.grupoar_tp2024.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -42,6 +44,10 @@ class MainActivity : AppCompatActivity() {
 
         saludarUsuario()
 
+        val btnSiguiente: Button = findViewById(R.id.siguiente)
+        val btnAnterior: Button = findViewById(R.id.anterior)
+        var valorInicio = 0
+
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar!!.title = resources.getString(R.string.titulo)
@@ -50,12 +56,36 @@ class MainActivity : AppCompatActivity() {
         pokemonAdapter = PokemonAdapter(ArrayList(), this)
         rvPokemones.adapter = pokemonAdapter
 
-        getPokemonesPorIdEnRango(0, 100) { pokemons ->
+        btnSiguiente.isEnabled =  false
+        btnAnterior.isEnabled = true
+
+        getPokemonesPorIdEnRango(valorInicio, 50, btnSiguiente) { pokemons ->
             // Actualiza la lista en el adaptador
             pokemonAdapter.updateData(pokemons)
         }
 
+        btnSiguiente.setOnClickListener {
+            if (valorInicio < 1300) {
+                btnSiguiente.isEnabled = false
+                if (valorInicio == 0)
+                    btnAnterior.isEnabled = true
+                valorInicio += 50
+                getPokemonesPorIdEnRango(valorInicio, 50, btnSiguiente) { pokemons ->
+                    pokemonAdapter.updateData(pokemons)
+                }
+            }
+        }
 
+        btnAnterior.setOnClickListener{
+            if(valorInicio > 0){
+                btnAnterior.isEnabled = false
+                valorInicio -= 50
+                btnSiguiente.isEnabled = true
+                getPokemonesPorIdEnRango(valorInicio, 50, btnAnterior) { pokemons ->
+                    pokemonAdapter.updateData(pokemons)
+                }
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -68,7 +98,8 @@ class MainActivity : AppCompatActivity() {
             /* val intent = Intent(this, ::class.java)
              startActivity(intent) */
             R.id.item_BuscarPokemon -> {
-                Toast.makeText(this, "Busqueda en desarrollo", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, BuscarPokemon::class.java)
+                startActivity(intent)
             }
 
             R.id.item_Configuracion -> {
@@ -83,7 +114,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun getPokemonesPorIdEnRango(desde: Int, hasta: Int, callback: (MutableList<PokemonDTO>) -> Unit) {
+    private fun getPokemonesPorIdEnRango(desde: Int, hasta: Int, boton: Button, callback: (MutableList<PokemonDTO>) -> Unit) {
         val listaPokemon: MutableList<PokemonDTO> = ArrayList()
         val resultados = api.getPokemonPorIdEnRango(desde, hasta)
 
@@ -95,7 +126,6 @@ class MainActivity : AppCompatActivity() {
                         api.getPokemonPorUrl(r.url)
                     }
 
-                    // Ejecutar todas las llamadas para obtener detalles
                     requests?.forEach { request ->
                         request.enqueue(object : Callback<PokemonDTO> {
                             override fun onResponse(call: Call<PokemonDTO>, response: Response<PokemonDTO>) {
@@ -103,6 +133,7 @@ class MainActivity : AppCompatActivity() {
                                     listaPokemon.add(response.body()!!)
                                     // Cuando se hayan cargado todos los Pokémon, notificar al callback
                                     if (listaPokemon.size == cantidadResultados) {
+                                        boton.isEnabled = true
                                         callback(listaPokemon)
                                     }
                                 } else {
@@ -111,16 +142,19 @@ class MainActivity : AppCompatActivity() {
                             }
 
                             override fun onFailure(call: Call<PokemonDTO>, t: Throwable) {
+                                boton.isEnabled = true
                                 Log.e("API_ERROR", "Error en la llamada getPokemonPorUrl: ${t.message}")
                             }
                         })
                     }
                 } else {
+                    boton.isEnabled = true
                     Log.e("API_ERROR", "Error en la llamada getPokemonPorIdEnRango: ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<ResultadoDTO>, t: Throwable) {
+                boton.isEnabled = true
                 Log.e("API_ERROR", "Error en la llamada getPokemonPorIdEnRango: ${t.message}")
             }
         })

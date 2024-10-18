@@ -1,7 +1,6 @@
 package com.example.grupoar_tp2024.apiRest
 
 import com.squareup.moshi.JsonClass
-import com.google.gson.annotations.SerializedName
 
 //ESTA CLASE ES LA IMPORTANTE.
 @JsonClass (generateAdapter = true)
@@ -86,8 +85,8 @@ data class AbilityDetails(
 
 data class Cry(
     //Son urls
-    val latest: String,
-    val legacy: String
+    val latest: String?,
+    val legacy: String?
 ) {
     override fun toString(): String {
         return "$latest, $legacy"

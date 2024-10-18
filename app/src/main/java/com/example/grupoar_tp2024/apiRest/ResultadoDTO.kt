@@ -1,6 +1,5 @@
 package com.example.grupoar_tp2024.apiRest
 
-import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
