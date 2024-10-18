@@ -64,7 +64,12 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
+
     //Corrutinas
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+
+    //Picasso
+    implementation("com.squareup.picasso:picasso:2.71828")
+
 }

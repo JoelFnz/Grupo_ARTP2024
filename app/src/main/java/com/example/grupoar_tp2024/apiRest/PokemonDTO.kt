@@ -16,6 +16,7 @@ data class PokemonDTO(
     val moves: List<MoveDetails>,
     val abilities: List<AbilityDetails>
 ){
+
     override fun toString(): String {
         var tipos = ""
         for(typeSlot in types)
@@ -29,13 +30,15 @@ data class PokemonDTO(
         for(abilityDetail in abilities)
             habilidades += "$abilityDetail "
 
-        return "Nombre: $name, " +
+        return """
+                "Nombre: $name, " +
                 "ID: $id, " +
                 "Peso: $weight, " +
                 "Altura: $height, " +
                 "Tipo: $tipos, " +
                 "Movimientos: $movimientos, " +
                 "Habilidades: $habilidades"
+        """.trimIndent()
     }
 }
 
@@ -73,9 +76,9 @@ data class AbilityDetails(
     val slot: Int
 ){
     override fun toString(): String {
-        var retorno = "Habilidad "
+        var retorno = "" // Habilidad
         if(is_hidden)
-            retorno += "oculta "
+            retorno += "(Oculta) " // oculta
 
         return retorno + ability.toString()
     }
@@ -102,9 +105,9 @@ data class Move(
 
 data class MoveDetails(
     val move: Move
-){
+) {
     override fun toString(): String {
-        return "Movimiento: ${move.toString()}"
+        return move.toString()  // Solo el nombre del movimiento
     }
 }
 

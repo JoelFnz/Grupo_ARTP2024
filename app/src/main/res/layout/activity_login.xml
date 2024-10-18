@@ -74,21 +74,21 @@
         android:layout_marginTop="50dp">
 
         <Button
-            android:id="@+id/btnIngresar"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="start|center"
-            android:text="Ingresar"
-            android:textSize="15sp" />
-
-        <Button
             android:id="@+id/btnRegistrarme"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="start|center"
             android:text="Registrarme"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/btnIngresar"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center"
+            android:layout_weight="1"
+            android:text="Ingresar"
             android:textSize="15sp" />
 
     </LinearLayout>
