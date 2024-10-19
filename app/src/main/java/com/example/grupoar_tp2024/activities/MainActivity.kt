@@ -111,11 +111,13 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.item_Configuracion -> {
-                showPopupMenu(findViewById(R.id.toolbar))
+                mostrarConfiguracion(toolbar)
             }
 
             R.id.item_AcercaDe -> {
-                Toast.makeText(this, "Acerca De en desarrollo", Toast.LENGTH_SHORT).show()
+
+               val intent = Intent(this, AcercaDe::class.java)
+                startActivity(intent)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -178,25 +180,20 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun showPopupMenu(view: View) {
-        val popupMenu = PopupMenu(this, view)
-        popupMenu.menuInflater.inflate(R.menu.menu_lateral, popupMenu.menu)
-        popupMenu.gravity = Gravity.END
-
-        popupMenu.setOnMenuItemClickListener { item ->
+    private fun mostrarConfiguracion(view : View){
+        val popup = PopupMenu(this, view)
+        popup.menuInflater.inflate(R.menu.popup_menu_configuracion, popup.menu)
+        popup.gravity = Gravity.END
+        popup.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.nav_item1 -> {
-                    Toast.makeText(this, "Seleccionaste Item 1", Toast.LENGTH_SHORT).show()
+
+                R.id.saludar -> {
+                    saludarUsuario()
                     true
                 }
-                R.id.nav_item2 -> {
-                    Toast.makeText(this, "Seleccionaste Item 2", Toast.LENGTH_SHORT).show()
-                    true
-                }
-                R.id.itemCierreSesion -> {
+                R.id.cerrarSesion -> {
                     Toast.makeText(this, "Cerrando sesión...", Toast.LENGTH_SHORT).show()
                     //LIBERADOR RECORDAR USUARIO
-
                     val preferenciasLimpiar = getSharedPreferences(resources.getString(R.string.sp_credenciales), MODE_PRIVATE)
                     with(preferenciasLimpiar.edit()) {
                         clear()
@@ -209,8 +206,7 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
-
-        popupMenu.show()
+        popup.show()
     }
 
 }

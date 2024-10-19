@@ -1,7 +1,11 @@
 package com.example.grupoar_tp2024.activities
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -10,10 +14,19 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.grupoar_tp2024.R
+import com.example.grupoar_tp2024.apiRest.IPokemonApi
+import com.example.grupoar_tp2024.apiRest.PokemonDTO
+import com.example.grupoar_tp2024.apiRest.RetrofitClient
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
+import retrofit2.Call
+import retrofit2.Callback as Cb
+import retrofit2.Response
 
 
 class PokeDetallesActivity : AppCompatActivity() {
+
+    val api = RetrofitClient.retrofit.create(IPokemonApi::class.java)
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +48,8 @@ class PokeDetallesActivity : AppCompatActivity() {
         val txtTipo: TextView = findViewById(R.id.txtTipo)
         val txtMovimiento: TextView = findViewById(R.id.txtMovimiento)
         val txtHabilidades: TextView = findViewById(R.id.txtHabilidades)
+        val btnSiguiente: Button = findViewById(R.id.siguiente)
+        val btnAnterior: Button = findViewById(R.id.anterior)
 
         txtNombre.text = intent.getStringExtra("nombre")
         etId.text = "ID: ${intent.getIntExtra("id", -1)}"
@@ -46,6 +61,14 @@ class PokeDetallesActivity : AppCompatActivity() {
         val imgFront: ImageView = findViewById(R.id.img_pokemon_sprite_front)
         val imgBack: ImageView = findViewById(R.id.img_pokemon_sprite_back)
         val sprites = intent.getStringExtra("sprites")
+
+        if(intent.getIntExtra("id", -1) > 1){
+            btnAnterior.isEnabled = true
+        }
+
+        if(intent.getIntExtra("id", -1) < 10277){
+            btnSiguiente.isEnabled = true
+        }
 
         if (sprites != null) {
             val spriteUrls = sprites.split(",").map { it.trim() }
@@ -60,6 +83,68 @@ class PokeDetallesActivity : AppCompatActivity() {
                 Picasso.get().load(spriteUrls[4]).into(imgFront) // de frente
             }
         }
+
+        btnSiguiente.setOnClickListener{
+            btnSiguiente.isEnabled = false
+            getPokemon(intent.getIntExtra("id", -1) + 1, btnSiguiente)
+        }
+
+        btnAnterior.setOnClickListener{
+            btnAnterior.isEnabled = false
+            getPokemon(intent.getIntExtra("id", -1) - 1, btnAnterior)
+        }
+
+    }
+
+    private fun getPokemon(id: Int, boton: Button){
+
+        var idActual = id
+        if(idActual < 1 || idActual > 10277){
+            boton.isEnabled = true
+            return
+        }
+
+
+        if(idActual == 1026 )
+            idActual = 10001 //El ultimo pokemon de la pokedex tiene id 1025,
+                            //pero la api usa como id > 10000 para pokemones especiales
+
+        val intent = Intent(this, PokeDetallesActivity::class.java)
+
+        api.getPokemonPorId(idActual.toLong()).enqueue(object: Cb<PokemonDTO>{
+            override fun onResponse(call: Call<PokemonDTO>, response: Response<PokemonDTO>) {
+                if(response.isSuccessful) {
+                    val pokemon = response.body()
+                    intent.putExtra("id", pokemon!!.id) //Int
+                    intent.putExtra("nombre", pokemon.name)
+                    intent.putExtra("tipo", pokemon.types.toString())
+                    intent.putExtra("movimientos", pokemon.moves.toString())
+                    intent.putExtra("habilidades", pokemon.abilities.toString())
+                    intent.putExtra("peso", pokemon.weight) //Int
+                    intent.putExtra("altura", pokemon.height) //Int
+                    intent.putExtra(
+                        "sprites",
+                        pokemon.sprites.toString()
+                    ) //Son urls en un string delimitadas por ', '
+                    intent.putExtra("gritos", pokemon.cries.toString()) //Lo mismo aca
+                    startActivity(intent)
+                    finish()
+                }
+                else {
+                    Log.e(
+                        "API_ERROR",
+                        "Error en la llamada getPokemonPorUrl: ${response.message()}"
+                    )
+                }
+                boton.isEnabled = true
+            }
+
+            override fun onFailure(call: Call<PokemonDTO>, t: Throwable) {
+                boton.isEnabled = true
+                Log.e("API_ERROR", "Error en la llamada getPokemonPorUrl: ${t.message}")
+            }
+
+        })
 
     }
 }

@@ -18,6 +18,36 @@
             layout="@layout/toolbarprimary_layout"
             />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/anterior"
+                android:text="Anterior"
+                android:textSize="15sp"
+                android:layout_margin="10dp"
+                android:enabled="false"
+                />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/siguiente"
+                android:text="Siguiente"
+                android:textSize="15sp"
+                android:layout_margin="10dp"
+                android:enabled="false"
+                />
+
+        </LinearLayout>
+
         <TextView
             android:id="@+id/txtNombre"
             android:layout_width="match_parent"
@@ -35,17 +65,30 @@
             android:gravity="center_horizontal"
             />
 
-        <ImageView
-            android:id="@+id/img_pokemon_sprite_front"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="128dp"
-            android:layout_centerInParent="true" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
 
-        <ImageView
-            android:id="@+id/img_pokemon_sprite_back"
-            android:layout_width="match_parent"
-            android:layout_height="125dp"
-            android:layout_centerInParent="true" />
+            <ImageView
+                android:id="@+id/img_pokemon_sprite_front"
+                android:layout_width="match_parent"
+                android:layout_height="128dp"
+                android:layout_centerInParent="true"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:id="@+id/img_pokemon_sprite_back"
+                android:layout_width="match_parent"
+                android:layout_height="125dp"
+                android:layout_centerInParent="true"
+                android:layout_weight="1"/>
+
+
+        </LinearLayout>
+
+
 
         <TextView
             android:layout_width="match_parent"
