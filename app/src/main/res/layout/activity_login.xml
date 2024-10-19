@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.Login"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/background_many">
 
     <include
         android:id="@+id/toolbar"
@@ -21,6 +22,7 @@
         android:text="Iniciar sesión"
         android:textSize="30sp"
         android:textAlignment="center"
+        android:textColor="@color/white"
         />
 
     <TextView
@@ -29,6 +31,7 @@
         android:layout_marginTop="30dp"
         android:text="Ingrese su email:"
         android:textSize="20sp"
+        android:textColor="@color/white"
         />
 
     <EditText
@@ -38,6 +41,7 @@
         android:hint="ejemplo@email.com"
         android:inputType="textEmailAddress"
         android:id="@+id/etEmail"
+        android:textColor="@color/white"
         />
 
     <TextView
@@ -46,6 +50,7 @@
         android:layout_marginTop="20dp"
         android:text="Ingrese su contraseña:"
         android:textSize="20sp"
+        android:textColor="@color/white"
         />
 
     <EditText
@@ -55,6 +60,7 @@
         android:hint="contraseña"
         android:inputType="textPassword"
         android:id="@+id/etContraseña"
+        android:textColor="@color/white"
         />
 
     <CheckBox
@@ -65,6 +71,7 @@
         android:text="Recordarme"
         android:textSize="15sp"
         android:id="@+id/cbRecordar"
+        android:textColor="@color/white"
         />
 
 

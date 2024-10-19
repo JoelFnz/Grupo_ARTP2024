@@ -107,7 +107,9 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.item_AcercaDe -> {
-                Toast.makeText(this, "Acerca De en desarrollo", Toast.LENGTH_SHORT).show()
+
+               val intent = Intent(this, AcercaDe::class.java)
+                startActivity(intent)
             }
         }
         return super.onOptionsItemSelected(item)
