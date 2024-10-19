@@ -16,6 +16,9 @@
         android:theme="@style/Theme.GrupoAR_TP2024"
         tools:targetApi="31">
         <activity
+            android:name=".activities.Configuracion"
+            android:exported="false" />
+        <activity
             android:name=".activities.BuscarPokemon"
             android:exported="false" />
         <activity
