@@ -50,14 +50,6 @@ class Login : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        //LIBERADOR RECORDAR USUARIO
-
-        /*val preferenciasLimpiar = getSharedPreferences(resources.getString(R.string.sp_credenciales), MODE_PRIVATE)
-        with(preferenciasLimpiar.edit()) {
-            clear()
-            apply()
-        }*/
-
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

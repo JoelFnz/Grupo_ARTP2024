@@ -48,6 +48,9 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    implementation("com.google.android.material:material:1.6.0")
+    implementation("androidx.drawerlayout:drawerlayout:1.1.1")
+
     //Moshi como conversor de json
     implementation(libs.moshi.kotlin)
     ksp(libs.moshi.kotlin.codegen)

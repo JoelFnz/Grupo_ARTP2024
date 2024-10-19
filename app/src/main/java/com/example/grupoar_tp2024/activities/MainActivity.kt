@@ -3,15 +3,21 @@ package com.example.grupoar_tp2024.activities
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.grupoar_tp2024.recycleView.PokemonAdapter
 import com.example.grupoar_tp2024.R
@@ -46,7 +52,6 @@ class MainActivity : AppCompatActivity() {
 
         val btnSiguiente: Button = findViewById(R.id.siguiente)
         val btnAnterior: Button = findViewById(R.id.anterior)
-        var valorInicio = 0
 
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -58,6 +63,8 @@ class MainActivity : AppCompatActivity() {
 
         btnSiguiente.isEnabled =  false
         btnAnterior.isEnabled = true
+
+        var valorInicio = 0
 
         getPokemonesPorIdEnRango(valorInicio, 50, btnSiguiente) { pokemons ->
             // Actualiza la lista en el adaptador
@@ -86,6 +93,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -103,7 +111,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.item_Configuracion -> {
-                Toast.makeText(this, "Configuración en desarrollo", Toast.LENGTH_SHORT).show()
+                showPopupMenu(findViewById(R.id.toolbar))
             }
 
             R.id.item_AcercaDe -> {
@@ -172,4 +180,40 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun showPopupMenu(view: View) {
+        val popupMenu = PopupMenu(this, view)
+        popupMenu.menuInflater.inflate(R.menu.menu_lateral, popupMenu.menu)
+        popupMenu.gravity = Gravity.END
+
+        popupMenu.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.nav_item1 -> {
+                    Toast.makeText(this, "Seleccionaste Item 1", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                R.id.nav_item2 -> {
+                    Toast.makeText(this, "Seleccionaste Item 2", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                R.id.itemCierreSesion -> {
+                    Toast.makeText(this, "Cerrando sesión...", Toast.LENGTH_SHORT).show()
+                    //LIBERADOR RECORDAR USUARIO
+
+                    val preferenciasLimpiar = getSharedPreferences(resources.getString(R.string.sp_credenciales), MODE_PRIVATE)
+                    with(preferenciasLimpiar.edit()) {
+                        clear()
+                        apply()
+                    }
+                    startActivity(Intent(this, Login::class.java))
+                    finish()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        popupMenu.show()
+    }
+
 }
+
