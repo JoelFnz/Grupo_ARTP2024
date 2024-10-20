@@ -54,12 +54,14 @@ class BuscarPokemon : AppCompatActivity() {
                         if(response.isSuccessful){
                             resultadoPokemon = response.body()
                             txtResultados.visibility = View.VISIBLE
+                            txtPokemonResultado.visibility = View.VISIBLE
                             txtResultados.text = "Resultados: "
                             txtPokemonResultado.text = "Nombre: ${resultadoPokemon?.name}    ID: ${resultadoPokemon?.id}"
                             btnVerPokemon.visibility = View.VISIBLE
                             btnVerPokemon.isEnabled = true
                         } else {
                             txtResultados.visibility = View.VISIBLE
+                            txtPokemonResultado.visibility = View.INVISIBLE
                             txtResultados.text = "No hay coincidencias"
                             Log.e("API_ERROR", "Error en la llamada getPokemonPorId: ${response.message()}")
                         }
@@ -67,6 +69,7 @@ class BuscarPokemon : AppCompatActivity() {
 
                     override fun onFailure(call: Call<PokemonDTO>, t: Throwable) {
                         txtResultados.visibility = View.VISIBLE
+                        txtPokemonResultado.visibility = View.INVISIBLE
                         txtResultados.text = "No hay coincidencias"
                         Log.e("API_ERROR", "Error en la llamada getPokemonPorId: ${t.message}")
                     }
@@ -79,6 +82,7 @@ class BuscarPokemon : AppCompatActivity() {
                     override fun onResponse(call: Call<PokemonDTO>, response: Response<PokemonDTO>) {
                         if(response.isSuccessful){
                             resultadoPokemon = response.body()
+                            txtPokemonResultado.visibility = View.VISIBLE
                             txtResultados.visibility = View.VISIBLE
                             txtResultados.text = "Resultados: "
                             txtPokemonResultado.text = "Nombre: ${resultadoPokemon?.name}    ID: ${resultadoPokemon?.id}"
@@ -86,6 +90,7 @@ class BuscarPokemon : AppCompatActivity() {
                             btnVerPokemon.isEnabled = true
                         } else {
                             txtResultados.visibility = View.VISIBLE
+                            txtPokemonResultado.visibility = View.INVISIBLE
                             txtResultados.text = "No hay coincidencias"
                             Log.e("API_ERROR", "Error en la llamada getPokemonPorId: ${response.message()}")
                         }
@@ -93,6 +98,7 @@ class BuscarPokemon : AppCompatActivity() {
 
                     override fun onFailure(call: Call<PokemonDTO>, t: Throwable) {
                         txtResultados.visibility = View.VISIBLE
+                        txtPokemonResultado.visibility = View.INVISIBLE
                         txtResultados.text = "No hay coincidencias"
                         Log.e("API_ERROR", "Error en la llamada getPokemonPorId: ${t.message}")
                     }
@@ -102,6 +108,7 @@ class BuscarPokemon : AppCompatActivity() {
             else if(etNombre.text.toString().all{ it.isDigit() }){
                 txtResultados.visibility = View.VISIBLE
                 txtResultados.text = "No hay coincidencias"
+                txtPokemonResultado.visibility = View.INVISIBLE
             }
             else
                 Toast.makeText(this, "Alguno de los campos debe ser rellenado", Toast.LENGTH_SHORT).show()

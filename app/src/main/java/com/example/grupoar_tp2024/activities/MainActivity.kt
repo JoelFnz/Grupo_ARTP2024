@@ -1,6 +1,7 @@
 package com.example.grupoar_tp2024.activities
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -23,6 +24,9 @@ import com.example.grupoar_tp2024.apiRest.PokemonDTO
 import com.example.grupoar_tp2024.apiRest.ResultadoDTO
 import com.example.grupoar_tp2024.apiRest.RetrofitClient
 import com.example.grupoar_tp2024.recycleView.PokemonAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -196,6 +200,21 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.saludar -> {
                     saludarUsuario()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        // Si hay un MediaPlayer existente lo liberamos
+
+                        val mediaPlayer = MediaPlayer().apply {
+                            setDataSource("https://us-tuna-sounds-files.voicemod.net/4200cf0b-4c84-4df3-bd7a-0559a5feccf8-1648917759974.mp3")
+                            setOnPreparedListener {
+                                start()
+                            }
+                            setOnErrorListener { _, _, _ ->
+
+                                false
+                            }
+                            prepareAsync()
+                        }
+                    }
                     true
                 }
                 R.id.cambiarTema -> {
