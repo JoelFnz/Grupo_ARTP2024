@@ -106,22 +106,26 @@ class BuscarPokemon : AppCompatActivity() {
             else
                 Toast.makeText(this, "Alguno de los campos debe ser rellenado", Toast.LENGTH_SHORT).show()
 
-            btnVerPokemon.setOnClickListener{
-                val intent = Intent(this, PokeDetallesActivity::class.java)
+            btnVerPokemon.setOnClickListener {
+                resultadoPokemon?.let {
+                    val intent = Intent(this, PokeDetallesActivity::class.java)
 
-                resultadoPokemon?.let { it1 -> intent.putExtra("id", it1.id) } //Int
-                intent.putExtra("nombre", resultadoPokemon?.name)
-                intent.putExtra("tipo", resultadoPokemon?.types.toString())
-                intent.putExtra("movimientos", resultadoPokemon?.moves.toString())
-                intent.putExtra("habilidades", resultadoPokemon?.abilities.toString())
-                resultadoPokemon?.let { it1 -> intent.putExtra("peso", it1.weight) } //Int
-                resultadoPokemon?.let { it1 -> intent.putExtra("altura", it1.height) } //Int
-                intent.putExtra("sprites", resultadoPokemon?.sprites.toString()) //Son urls en un string delimitadas por ', '
-                intent.putExtra("gritos", resultadoPokemon?.cries.toString()) //Lo mismo aca
+                    intent.putExtra("id", it.id)
+                    intent.putExtra("nombre", it.name)
+                    intent.putExtra("tipo", it.types.toString())
+                    intent.putExtra("movimientos", it.moves.toString())
+                    intent.putExtra("habilidades", it.abilities.toString())
+                    intent.putExtra("peso", it.weight)
+                    intent.putExtra("altura", it.height)
+                    intent.putExtra("sprites", it.sprites.toString())
+                    intent.putExtra("gritos", it.cries.toString())
 
-                this.startActivity(intent)
-                finish()
+                    startActivity(intent)
+                } ?: run {
+                    Toast.makeText(this, "Primero busca un Pokémon antes de ver detalles", Toast.LENGTH_SHORT).show()
+                }
             }
+
         }
 
     }

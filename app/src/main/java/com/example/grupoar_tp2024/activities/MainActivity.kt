@@ -64,32 +64,50 @@ class MainActivity : AppCompatActivity() {
 
         var valorInicio = 0
 
-        getPokemonesPorIdEnRango(valorInicio, 50, btnSiguiente) { pokemons ->
-            // Actualiza la lista en el adaptador
-            pokemonAdapter.updateData(pokemons)
-        }
+        Thread {
+            getPokemonesPorIdEnRango(valorInicio, 50, btnSiguiente) { pokemons ->
+                runOnUiThread {
+                    pokemonAdapter.updateData(pokemons)
+                }
+            }
+        }.start()
 
         btnSiguiente.setOnClickListener {
-            if (valorInicio < 1300) {
-                btnSiguiente.isEnabled = false
-                if (valorInicio == 0)
-                    btnAnterior.isEnabled = true
-                valorInicio += 50
-                getPokemonesPorIdEnRango(valorInicio, 50, btnSiguiente) { pokemons ->
-                    pokemonAdapter.updateData(pokemons)
+            Thread {
+                if (valorInicio < 1300) {
+                    runOnUiThread {
+                        btnSiguiente.isEnabled = false
+                        if (valorInicio == 0)
+                            btnAnterior.isEnabled = true
+                    }
+
+                    valorInicio += 50
+                    getPokemonesPorIdEnRango(valorInicio, 50, btnSiguiente) { pokemons ->
+                        runOnUiThread {
+                            pokemonAdapter.updateData(pokemons)
+                        }
+                    }
                 }
-            }
+            }.start()
         }
 
-        btnAnterior.setOnClickListener{
-            if(valorInicio > 0){
-                btnAnterior.isEnabled = false
-                valorInicio -= 50
-                btnSiguiente.isEnabled = true
-                getPokemonesPorIdEnRango(valorInicio, 50, btnAnterior) { pokemons ->
-                    pokemonAdapter.updateData(pokemons)
+        btnAnterior.setOnClickListener {
+            Thread {
+                if (valorInicio > 0) {
+                    runOnUiThread {
+                        btnAnterior.isEnabled = false
+                        btnSiguiente.isEnabled = true
+                    }
+
+                    valorInicio -= 50
+
+                    getPokemonesPorIdEnRango(valorInicio, 50, btnAnterior) { pokemons ->
+                        runOnUiThread {
+                            pokemonAdapter.updateData(pokemons)
+                        }
+                    }
                 }
-            }
+            }.start()
         }
 
     }
@@ -124,49 +142,40 @@ class MainActivity : AppCompatActivity() {
 
     private fun getPokemonesPorIdEnRango(desde: Int, hasta: Int, boton: Button, callback: (MutableList<PokemonDTO>) -> Unit) {
         val listaPokemon: MutableList<PokemonDTO> = ArrayList()
-        val resultados = api.getPokemonPorIdEnRango(desde, hasta)
+        Thread {
+            try {
+                val resultados = api.getPokemonPorIdEnRango(desde, hasta).execute()
 
-        resultados.enqueue(object : Callback<ResultadoDTO> {
-            override fun onResponse(call: Call<ResultadoDTO>, response: Response<ResultadoDTO>) {
-                if (response.isSuccessful) {
-                    val cantidadResultados = response.body()?.results?.size
-                    val requests = response.body()?.results?.map { r ->
-                        api.getPokemonPorUrl(r.url)
+                if (resultados.isSuccessful) {
+                    val cantidadResultados = resultados.body()?.results?.size ?: 0
+                    val requests = resultados.body()?.results?.map { r -> api.getPokemonPorUrl(r.url).execute() }
+
+                    requests?.forEach { response ->
+                        if (response.isSuccessful) {
+                            listaPokemon.add(response.body()!!)
+                        }
                     }
 
-                    requests?.forEach { request ->
-                        request.enqueue(object : Callback<PokemonDTO> {
-                            override fun onResponse(call: Call<PokemonDTO>, response: Response<PokemonDTO>) {
-                                if (response.isSuccessful) {
-                                    listaPokemon.add(response.body()!!)
-                                    // Cuando se hayan cargado todos los Pokémon, notificar al callback
-                                    if (listaPokemon.size == cantidadResultados) {
-                                        boton.isEnabled = true
-                                        callback(listaPokemon)
-                                    }
-                                } else {
-                                    Log.e("API_ERROR", "Error en la llamada getPokemonPorUrl: ${response.message()}")
-                                }
-                            }
 
-                            override fun onFailure(call: Call<PokemonDTO>, t: Throwable) {
-                                boton.isEnabled = true
-                                Log.e("API_ERROR", "Error en la llamada getPokemonPorUrl: ${t.message}")
-                            }
-                        })
+                    runOnUiThread {
+                        boton.isEnabled = true
+                        callback(listaPokemon)
                     }
                 } else {
+                    runOnUiThread {
+                        boton.isEnabled = true
+                        Log.e("API_ERROR", "Error en la llamada: ${resultados.message()}")
+                    }
+                }
+            } catch (e: Exception) {
+                runOnUiThread {
                     boton.isEnabled = true
-                    Log.e("API_ERROR", "Error en la llamada getPokemonPorIdEnRango: ${response.message()}")
+                    Log.e("API_ERROR", "Error: ${e.message}")
                 }
             }
-
-            override fun onFailure(call: Call<ResultadoDTO>, t: Throwable) {
-                boton.isEnabled = true
-                Log.e("API_ERROR", "Error en la llamada getPokemonPorIdEnRango: ${t.message}")
-            }
-        })
+        }.start()
     }
+
 
     private fun saludarUsuario() {
         val bundle: Bundle? = intent.extras
