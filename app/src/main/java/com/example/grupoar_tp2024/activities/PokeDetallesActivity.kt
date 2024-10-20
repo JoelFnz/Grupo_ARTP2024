@@ -24,11 +24,17 @@ import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback as Cb
 import retrofit2.Response
+import android.media.MediaPlayer
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.net.URL
 
 
 class PokeDetallesActivity : AppCompatActivity() {
 
     val api = RetrofitClient.retrofit.create(IPokemonApi::class.java)
+    private var mediaPlayer: MediaPlayer? = null
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +62,7 @@ class PokeDetallesActivity : AppCompatActivity() {
         val btnSpriteShiny: Button = findViewById(R.id.spriteShiny)
         val txtPeso: TextView = findViewById(R.id.peso)
         val txtAltura: TextView = findViewById(R.id.altura)
+        val btnSonido: Button = findViewById(R.id.sonido)
 
         txtNombre.text = intent.getStringExtra("nombre")
         etId.text = "ID: ${intent.getIntExtra("id", -1)}"
@@ -79,6 +86,7 @@ class PokeDetallesActivity : AppCompatActivity() {
         }
 
         val spriteUrls = sprites?.split(",")?.map { it.trim() }
+        val gritosUrls = intent.getStringExtra("gritos")?.split(",")?.map { it.trim() }
         var esMasculino = true
         var esShiny = false
 
@@ -130,6 +138,11 @@ class PokeDetallesActivity : AppCompatActivity() {
             }
         }
 
+        btnSonido.setOnClickListener{
+            if(!gritosUrls.isNullOrEmpty())
+                reproducirGrito(gritosUrls[0])
+        }
+
         btnSiguiente.setOnClickListener{
             btnSiguiente.isEnabled = false
             getPokemon(intent.getIntExtra("id", -1) + 1, btnSiguiente)
@@ -155,6 +168,9 @@ class PokeDetallesActivity : AppCompatActivity() {
         if(idActual == 1026 )
             idActual = 10001 //El ultimo pokemon de la pokedex tiene id 1025,
                             //pero la api usa como id > 10000 para pokemones especiales
+
+        if(idActual == 10000)
+            idActual = 1025
 
         val intent = Intent(this, PokeDetallesActivity::class.java)
 
@@ -217,5 +233,30 @@ class PokeDetallesActivity : AppCompatActivity() {
                 Picasso.get().load(spriteUrls[4]).into(frente)
             }
         }
+    }
+
+    private fun reproducirGrito(url: String) {
+        CoroutineScope(Dispatchers.Main).launch {
+            // Si hay un MediaPlayer existente lo liberamos
+            mediaPlayer?.release()
+
+            mediaPlayer = MediaPlayer().apply {
+                setDataSource(url)
+                setOnPreparedListener {
+                    start()
+                }
+                setOnErrorListener { _, _, _ ->
+
+                    false
+                }
+                prepareAsync()
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer?.release() // Libera el MediaPlayer al destruir la actividad
+        mediaPlayer = null
     }
 }

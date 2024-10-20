@@ -114,6 +114,16 @@
                 android:textSize="15sp"
                 />
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight = "1"
+                android:id="@+id/sonido"
+                android:layout_margin="5dp"
+                android:text="Reproducir grito"
+                android:textSize="15sp"
+                />
+
         </LinearLayout>
 
 
