@@ -33,6 +33,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import android.Manifest
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
@@ -81,6 +82,13 @@ class Login : AppCompatActivity() {
         val preferencias = getSharedPreferences(resources.getString(R.string.sp_credenciales), MODE_PRIVATE)
         val usuarioGuardado = preferencias.getString(resources.getString(R.string.nombre_usuario), "")
         val passwordGuardado = preferencias.getString(resources.getString(R.string.password_usuario), "")
+
+
+        //Cargar el tema elegido por el usuario. Por defecto se usa modo noche porque soy darks U_U
+        AppCompatDelegate.setDefaultNightMode(
+            if (getSharedPreferences("app_preferences", MODE_PRIVATE).getBoolean("dark_mode", true))
+                AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+        )
 
         if (usuarioGuardado != "" && passwordGuardado != "" && usuarioGuardado != null)
             startMainActivity(usuarioGuardado)

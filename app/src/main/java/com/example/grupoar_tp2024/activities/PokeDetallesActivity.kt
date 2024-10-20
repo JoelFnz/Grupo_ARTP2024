@@ -3,6 +3,7 @@ package com.example.grupoar_tp2024.activities
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -19,6 +20,7 @@ import com.example.grupoar_tp2024.apiRest.PokemonDTO
 import com.example.grupoar_tp2024.apiRest.RetrofitClient
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
+import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback as Cb
 import retrofit2.Response
@@ -50,12 +52,18 @@ class PokeDetallesActivity : AppCompatActivity() {
         val txtHabilidades: TextView = findViewById(R.id.txtHabilidades)
         val btnSiguiente: Button = findViewById(R.id.siguiente)
         val btnAnterior: Button = findViewById(R.id.anterior)
+        val btnSpriteFem: Button = findViewById(R.id.spriteFem)
+        val btnSpriteShiny: Button = findViewById(R.id.spriteShiny)
+        val txtPeso: TextView = findViewById(R.id.peso)
+        val txtAltura: TextView = findViewById(R.id.altura)
 
         txtNombre.text = intent.getStringExtra("nombre")
         etId.text = "ID: ${intent.getIntExtra("id", -1)}"
         txtTipo.text = intent.getStringExtra("tipo")
         txtMovimiento.text = intent.getStringExtra("movimientos")
         txtHabilidades.text = intent.getStringExtra("habilidades")
+        txtPeso.text = txtPeso.text.toString() + (intent.getIntExtra("peso", -1).toFloat() / 10) + " kg"
+        txtAltura.text = txtAltura.text.toString() + (intent.getIntExtra("altura", -1).toFloat() / 10) + " m"
         //txtRegion.text = region
 
         val imgFront: ImageView = findViewById(R.id.img_pokemon_sprite_front)
@@ -70,17 +78,55 @@ class PokeDetallesActivity : AppCompatActivity() {
             btnSiguiente.isEnabled = true
         }
 
-        if (sprites != null) {
-            val spriteUrls = sprites.split(",").map { it.trim() }
+        val spriteUrls = sprites?.split(",")?.map { it.trim() }
+        var esMasculino = true
+        var esShiny = false
 
+        if(spriteUrls != null){
+            cambiarSprite(1, imgFront, imgBack, spriteUrls)
+        }
 
-            if (spriteUrls.isNotEmpty()) {
-                Picasso.get().load(spriteUrls[0]).into(imgBack) // de atras
+        btnSpriteFem.setOnClickListener{
+            if(spriteUrls != null){
+                if((!esMasculino || spriteUrls[1] == "null") && !esShiny){ //Default masc
+
+                    cambiarSprite(1, imgFront, imgBack, spriteUrls)
+                    esMasculino = true
+                } else if((!esMasculino || spriteUrls[1] == "null") && esShiny){ //Shiny masc
+
+                    cambiarSprite(3, imgFront, imgBack, spriteUrls)
+                    esMasculino = true
+                } else if(!esShiny){ //Default fem
+
+                    cambiarSprite(2, imgFront, imgBack, spriteUrls)
+                    esMasculino = false
+                } else { //Shiny fem
+
+                    cambiarSprite(4, imgFront, imgBack, spriteUrls)
+                    esMasculino = false
+                }
             }
+        }
 
+        btnSpriteShiny.setOnClickListener{
+            if(spriteUrls != null){
+                if(esMasculino && !esShiny){  //Default masc
 
-            if (spriteUrls.size > 4) {
-                Picasso.get().load(spriteUrls[4]).into(imgFront) // de frente
+                    cambiarSprite(3, imgFront, imgBack, spriteUrls)
+                    esShiny = true
+                } else if(!esMasculino && !esShiny){ //Default fem
+
+                    cambiarSprite(4, imgFront, imgBack, spriteUrls)
+                    esShiny = true
+                } else if(!esMasculino){ //Shiny fem
+
+                    cambiarSprite(2, imgFront, imgBack, spriteUrls)
+                    esShiny = false
+                } else { //Shiny masc
+
+                    cambiarSprite(1, imgFront, imgBack, spriteUrls)
+                    esShiny = false
+                }
             }
         }
 
@@ -93,6 +139,7 @@ class PokeDetallesActivity : AppCompatActivity() {
             btnAnterior.isEnabled = false
             getPokemon(intent.getIntExtra("id", -1) - 1, btnAnterior)
         }
+
 
     }
 
@@ -146,5 +193,29 @@ class PokeDetallesActivity : AppCompatActivity() {
 
         })
 
+    }
+
+    private fun cambiarSprite(spriteRequerida: Int, frente: ImageView, espalda: ImageView, spriteUrls: List<String>) {
+        if(spriteUrls.isEmpty())
+            return
+
+        when(spriteRequerida){
+            2 -> { //Femenino default
+                Picasso.get().load(spriteUrls[1]).into(espalda)
+                Picasso.get().load(spriteUrls[5]).into(frente)
+            }
+            3 -> { //Masculino shiny
+                Picasso.get().load(spriteUrls[2]).into(espalda)
+                Picasso.get().load(spriteUrls[6]).into(frente)
+            }
+            4 -> { //Femenino shiny
+                Picasso.get().load(spriteUrls[3]).into(espalda)
+                Picasso.get().load(spriteUrls[7]).into(frente)
+            }
+            else -> { //Masculino default
+                Picasso.get().load(spriteUrls[0]).into(espalda)
+                Picasso.get().load(spriteUrls[4]).into(frente)
+            }
+        }
     }
 }

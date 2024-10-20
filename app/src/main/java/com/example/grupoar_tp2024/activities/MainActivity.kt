@@ -8,23 +8,21 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.example.grupoar_tp2024.recycleView.PokemonAdapter
 import com.example.grupoar_tp2024.R
 import com.example.grupoar_tp2024.apiRest.IPokemonApi
 import com.example.grupoar_tp2024.apiRest.PokemonDTO
 import com.example.grupoar_tp2024.apiRest.ResultadoDTO
 import com.example.grupoar_tp2024.apiRest.RetrofitClient
+import com.example.grupoar_tp2024.recycleView.PokemonAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -191,6 +189,10 @@ class MainActivity : AppCompatActivity() {
                     saludarUsuario()
                     true
                 }
+                R.id.cambiarTema -> {
+                    cambiarAModoNoche()
+                    true
+                }
                 R.id.cerrarSesion -> {
                     Toast.makeText(this, "Cerrando sesión...", Toast.LENGTH_SHORT).show()
                     //LIBERADOR RECORDAR USUARIO
@@ -207,6 +209,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
         popup.show()
+    }
+
+    private fun cambiarAModoNoche(){
+        val preferencias = getSharedPreferences("app_preferences", MODE_PRIVATE)
+        if(!preferencias.getBoolean("dark_mode", false)){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+        preferencias.edit().putBoolean("dark_mode", !preferencias.getBoolean("dark_mode", false)).apply()
+        recreate()
     }
 
 }

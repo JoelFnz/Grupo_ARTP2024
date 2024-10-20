@@ -39,6 +39,7 @@ data class PokemonDTO(
                 "Habilidades: $habilidades"
         """.trimIndent()
     }
+
 }
 
 //CLASES COMPLEMENTARIAS

@@ -4,6 +4,10 @@
         android:id="@+id/saludar"
         android:title="Saludar" />
     <item
+        android:id="@+id/cambiarTema"
+        android:title="Cambiar Tema"
+        />
+    <item
         android:id="@+id/cerrarSesion"
         android:title="Cerrar Sesión" />
 
