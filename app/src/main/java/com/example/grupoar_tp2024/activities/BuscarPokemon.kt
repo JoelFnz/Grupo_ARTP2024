@@ -20,13 +20,19 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class BuscarPokemon : AppCompatActivity() {
 
     val api = RetrofitClient.retrofit.create(IPokemonApi::class.java)
+    private var resultadoPokemon: PokemonDTO? = null // Propiedad de clase
+
+    // Declarar las variables como propiedades de la clase
+    private lateinit var txtResultados: TextView
+    private lateinit var txtPokemonResultado: TextView
+    private lateinit var btnVerPokemon: Button
+    private lateinit var btnBuscar: Button // Agregar esta línea
+    private lateinit var etNumero: EditText
+    private lateinit var etNombre: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,98 +44,96 @@ class BuscarPokemon : AppCompatActivity() {
             insets
         }
 
-        val btnBuscar: Button = findViewById(R.id.buscar)
-        val btnVerPokemon: Button = findViewById(R.id.irAlPokemon)
-        val txtResultados: TextView = findViewById(R.id.textoResultado)
-        val txtPokemonResultado: TextView = findViewById(R.id.pokemonResultado)
-        val etNumero: EditText = findViewById(R.id.numero)
-        val etNombre: EditText = findViewById(R.id.nombre)
-        var resultadoPokemon: PokemonDTO? = null
+        // Inicializar las variables
+        txtResultados = findViewById(R.id.textoResultado)
+        txtPokemonResultado = findViewById(R.id.pokemonResultado)
+        btnVerPokemon = findViewById(R.id.irAlPokemon)
+        btnBuscar = findViewById(R.id.buscar) // Inicializa btnBuscar
+        etNumero = findViewById(R.id.numero)
+        etNombre = findViewById(R.id.nombre)
 
         txtResultados.visibility = View.INVISIBLE
         btnVerPokemon.visibility = View.INVISIBLE
         btnVerPokemon.isEnabled = false
 
         btnBuscar.setOnClickListener {
+            realizarBusqueda()
+        }
 
-            if (etNumero.text.toString().isNotEmpty()) {
-
-                val idPokemon = etNumero.text.toString().toLong()
-
-                CoroutineScope(Dispatchers.IO).launch {
-                    try {
-                        val resultadoPokemon = api.getPokemonPorId(idPokemon)
-
-                        withContext(Dispatchers.Main) {
-                            txtResultados.visibility = View.VISIBLE
-                            txtPokemonResultado.visibility = View.VISIBLE
-                            txtResultados.text = "Resultados: "
-                            txtPokemonResultado.text = "Nombre: ${resultadoPokemon.name}    ID: ${resultadoPokemon.id}"
-                            btnVerPokemon.visibility = View.VISIBLE
-                            btnVerPokemon.isEnabled = true
-                        }
-                    } catch (e: Exception) {
-                        withContext(Dispatchers.Main) {
-                            txtResultados.visibility = View.VISIBLE
-                            txtPokemonResultado.visibility = View.INVISIBLE
-                            txtResultados.text = "No hay coincidencias"
-                            Log.e("API_ERROR", "Error en la llamada getPokemonPorId: ${e.message}")
-                        }
-                    }
-                }
-            }
-            else if (etNombre.text.toString().isNotEmpty() && !etNombre.text.toString().all { it.isDigit() }) {
-                val nombrePokemon = etNombre.text.toString().lowercase()
-
-                CoroutineScope(Dispatchers.IO).launch {
-                    try {
-                        val resultadoPokemon = api.getPokemonPorNombre(nombrePokemon)
-
-                        withContext(Dispatchers.Main) {
-                            txtResultados.visibility = View.VISIBLE
-                            txtPokemonResultado.visibility = View.VISIBLE
-                            txtResultados.text = "Resultados: "
-                            txtPokemonResultado.text = "Nombre: ${resultadoPokemon.name}    ID: ${resultadoPokemon.id}"
-                            btnVerPokemon.visibility = View.VISIBLE
-                            btnVerPokemon.isEnabled = true
-                        }
-                    } catch (e: Exception) {
-                        withContext(Dispatchers.Main) {
-                            txtResultados.visibility = View.VISIBLE
-                            txtPokemonResultado.visibility = View.INVISIBLE
-                            txtResultados.text = "No hay coincidencias"
-                            Log.e("API_ERROR", "Error en la llamada getPokemonPorNombre: ${e.message}")
-                        }
-                    }
-                }
-            } else if (etNombre.text.toString().all { it.isDigit() }) {
-                txtResultados.visibility = View.VISIBLE
-                txtResultados.text = "No hay coincidencias"
-                txtPokemonResultado.visibility = View.INVISIBLE
-            } else {
-                Toast.makeText(this, "Alguno de los campos debe ser rellenado", Toast.LENGTH_SHORT).show()
-            }
-
-            btnVerPokemon.setOnClickListener {
+        btnVerPokemon.setOnClickListener {
+            resultadoPokemon?.let {
                 val intent = Intent(this, PokeDetallesActivity::class.java)
-
-                resultadoPokemon?.let {
-                    intent.putExtra("id", it.id) // Int
-                    intent.putExtra("nombre", it.name)
-                    intent.putExtra("tipo", it.types.toString())
-                    intent.putExtra("movimientos", it.moves.toString())
-                    intent.putExtra("habilidades", it.abilities.toString())
-                    intent.putExtra("peso", it.weight) // Int
-                    intent.putExtra("altura", it.height) // Int
-                    intent.putExtra("sprites", it.sprites.toString()) // URLs como string
-                    intent.putExtra("gritos", it.cries.toString()) // Lo mismo aquí
-                }
-
+                intent.putExtra("id", it.id)
+                intent.putExtra("nombre", it.name)
+                intent.putExtra("tipo", it.types.toString())
+                intent.putExtra("movimientos", it.moves.toString())
+                intent.putExtra("habilidades", it.abilities.toString())
+                intent.putExtra("peso", it.weight)
+                intent.putExtra("altura", it.height)
+                intent.putExtra("sprites", it.sprites.toString())
+                intent.putExtra("gritos", it.cries.toString())
                 startActivity(intent)
                 finish()
             }
         }
+    }
 
+    private fun realizarBusqueda() {
+        if (etNumero.text.toString().isNotEmpty()) {
+            val idPokemon = etNumero.text.toString().toLong()
 
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    resultadoPokemon = api.getPokemonPorId(idPokemon)
+
+                    withContext(Dispatchers.Main) {
+                        mostrarResultado(resultadoPokemon)
+                    }
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        mostrarError("No hay coincidencias")
+                        Log.e("API_ERROR", "Error en la llamada getPokemonPorId: ${e.message}")
+                    }
+                }
+            }
+        } else if (etNombre.text.toString().isNotEmpty() && !etNombre.text.toString().all { it.isDigit() }) {
+            val nombrePokemon = etNombre.text.toString().lowercase()
+
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    resultadoPokemon = api.getPokemonPorNombre(nombrePokemon)
+
+                    withContext(Dispatchers.Main) {
+                        mostrarResultado(resultadoPokemon)
+                    }
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        mostrarError("No hay coincidencias")
+                        Log.e("API_ERROR", "Error en la llamada getPokemonPorNombre: ${e.message}")
+                    }
+                }
+            }
+        } else if (etNombre.text.toString().all { it.isDigit() }) {
+            mostrarError("No hay coincidencias")
+        } else {
+            Toast.makeText(this, "Alguno de los campos debe ser rellenado", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun mostrarResultado(pokemon: PokemonDTO?) {
+        if (pokemon != null) {
+            txtResultados.visibility = View.VISIBLE
+            txtPokemonResultado.visibility = View.VISIBLE
+            txtResultados.text = "Resultados: "
+            txtPokemonResultado.text = "Nombre: ${pokemon.name}    ID: ${pokemon.id}"
+            btnVerPokemon.visibility = View.VISIBLE
+            btnVerPokemon.isEnabled = true
+        }
+    }
+
+    private fun mostrarError(mensaje: String) {
+        txtResultados.visibility = View.VISIBLE
+        txtPokemonResultado.visibility = View.INVISIBLE
+        txtResultados.text = mensaje
     }
 }
