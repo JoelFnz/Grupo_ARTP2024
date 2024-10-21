@@ -67,14 +67,32 @@ class PokeDetallesActivity : AppCompatActivity() {
         val txtAltura: TextView = findViewById(R.id.altura)
         val btnSonido: Button = findViewById(R.id.sonido)
 
+        var movimientos = intent.getStringExtra("movimientos")?.replaceFirstChar { it.uppercase() }
+        var habilidades = intent.getStringExtra("habilidades")?.replaceFirstChar { it.uppercase() }
+        var tipos = intent.getStringExtra("tipo")?.replaceFirstChar { it.uppercase() }
+
+        if (tipos != null) {
+            tipos = tipos.replace("[", "")
+            tipos = tipos.replace("]", "")
+        }
+
+        if(habilidades != null){
+            habilidades = habilidades.replace("[", "")
+            habilidades = habilidades.replace("]", "")
+        }
+
+        if(movimientos != null){
+            movimientos =movimientos.replace("[", "")
+            movimientos = movimientos.replace("]", "")
+        }
+
         txtNombre.text = intent.getStringExtra("nombre")?.replaceFirstChar { it.uppercase() }
         etId.text = "ID: ${intent.getIntExtra("id", -1)}"
-        txtTipo.text = intent.getStringExtra("tipo")?.replaceFirstChar { it.uppercase() }
-        txtMovimiento.text = intent.getStringExtra("movimientos")?.replaceFirstChar { it.uppercase() }
-        txtHabilidades.text = intent.getStringExtra("habilidades")?.replaceFirstChar { it.uppercase() }
+        txtTipo.text = tipos
+        txtMovimiento.text = movimientos
+        txtHabilidades.text = habilidades
         txtPeso.text = txtPeso.text.toString() + (intent.getIntExtra("peso", -1).toFloat() / 10) + " kg"
         txtAltura.text = txtAltura.text.toString() + (intent.getIntExtra("altura", -1).toFloat() / 10) + " m"
-        //txtRegion.text = region
 
         val imgFront: ImageView = findViewById(R.id.img_pokemon_sprite_front)
         val imgBack: ImageView = findViewById(R.id.img_pokemon_sprite_back)
