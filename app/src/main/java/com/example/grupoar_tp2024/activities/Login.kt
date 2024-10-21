@@ -33,6 +33,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import android.Manifest
+import android.net.Uri
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -79,6 +80,7 @@ class Login : AppCompatActivity() {
         val preferencias = getSharedPreferences(resources.getString(R.string.sp_credenciales), MODE_PRIVATE)
         val usuarioGuardado = preferencias.getString(resources.getString(R.string.nombre_usuario), "")
         val passwordGuardado = preferencias.getString(resources.getString(R.string.password_usuario), "")
+        val txtEspecial: TextView = findViewById(R.id.rickroll)
 
 
         //Cargar el tema elegido por el usuario. Por defecto se usa modo noche porque soy darks U_U
@@ -118,6 +120,11 @@ class Login : AppCompatActivity() {
                 startMainActivity(email)
             } else
                 Toast.makeText(this, "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
+        }
+
+        txtEspecial.setOnClickListener{
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=dQw4w9WgXcQ")) // Reemplaza VIDEO_ID con el ID del video
+            startActivity(intent)
         }
 
 
