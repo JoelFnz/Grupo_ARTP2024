@@ -15,6 +15,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -100,6 +101,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+
+        if (menu != null) {
+            for (i in 0 until menu.size()) {
+                val menuItem = menu.getItem(i)
+                val drawable = menuItem.icon
+                if (drawable != null) {
+                    drawable.mutate()
+                    drawable.setTint(ContextCompat.getColor(this, R.color.white))
+                }
+            }
+        }
+
         return super.onCreateOptionsMenu(menu)
     }
 
