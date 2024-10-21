@@ -55,6 +55,12 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:textSize="50sp"
+           android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="4"
             />
 
         <TextView
@@ -64,6 +70,12 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:gravity="center_horizontal"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="4"
             />
 
         <LinearLayout
@@ -141,6 +153,7 @@
                 android:gravity="center_horizontal"
                 android:layout_weight="1"
                 android:id="@+id/peso"
+                android:textColor="@android:color/white"
                 />
 
             <TextView
@@ -150,6 +163,7 @@
                 android:gravity="center_horizontal"
                 android:layout_weight="1"
                 android:id="@+id/altura"
+                android:textColor="@android:color/white"
                 />
 
         </LinearLayout>
@@ -160,6 +174,12 @@
             android:text="Tipo"
             android:gravity="center_horizontal"
             android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="4"
             />
 
         <TextView
@@ -168,6 +188,7 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:gravity="center_horizontal"
+            android:textColor="@android:color/white"
             />
 
         <TextView
@@ -176,6 +197,12 @@
             android:gravity="center_horizontal"
             android:textSize="25sp"
             android:text = "Habilidades"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="4"
             />
 
         <TextView
@@ -184,6 +211,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:textSize="25sp"
+            android:textColor="@android:color/white"
             />
 
         <TextView
@@ -192,6 +220,12 @@
             android:gravity="center_horizontal"
             android:textSize="25sp"
             android:text ="Movimientos"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="4"
             />
 
         <TextView
@@ -200,6 +234,8 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:gravity="center_horizontal"
+            android:textColor="@android:color/white"
+
             />
 
     </LinearLayout>
