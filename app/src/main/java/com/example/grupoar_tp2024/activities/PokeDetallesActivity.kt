@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.media.Image
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -20,6 +21,10 @@ import com.example.grupoar_tp2024.apiRest.PokemonDTO
 import com.example.grupoar_tp2024.apiRest.RetrofitClient
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback as Cb
@@ -29,6 +34,8 @@ import retrofit2.Response
 class PokeDetallesActivity : AppCompatActivity() {
 
     val api = RetrofitClient.retrofit.create(IPokemonApi::class.java)
+    private var mediaPlayer: MediaPlayer? = null
+
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +63,7 @@ class PokeDetallesActivity : AppCompatActivity() {
         val btnSpriteShiny: Button = findViewById(R.id.spriteShiny)
         val txtPeso: TextView = findViewById(R.id.peso)
         val txtAltura: TextView = findViewById(R.id.altura)
+        val btnSonido: Button = findViewById(R.id.sonido)
 
         txtNombre.text = intent.getStringExtra("nombre")
         etId.text = "ID: ${intent.getIntExtra("id", -1)}"
@@ -81,6 +89,7 @@ class PokeDetallesActivity : AppCompatActivity() {
         val spriteUrls = sprites?.split(",")?.map { it.trim() }
         var esMasculino = true
         var esShiny = false
+        val gritosUrls = intent.getStringExtra("gritos")?.split(",")?.map { it.trim() }
 
         if(spriteUrls != null){
             cambiarSprite(1, imgFront, imgBack, spriteUrls)
@@ -130,6 +139,11 @@ class PokeDetallesActivity : AppCompatActivity() {
             }
         }
 
+        btnSonido.setOnClickListener{
+            if(!gritosUrls.isNullOrEmpty())
+                reproducirGrito(gritosUrls[0])
+        }
+
         btnSiguiente.setOnClickListener{
             btnSiguiente.isEnabled = false
             getPokemon(intent.getIntExtra("id", -1) + 1, btnSiguiente)
@@ -143,56 +157,46 @@ class PokeDetallesActivity : AppCompatActivity() {
 
     }
 
-    private fun getPokemon(id: Int, boton: Button){
-
+    private fun getPokemon(id: Int, boton: Button) {
         var idActual = id
-        if(idActual < 1 || idActual > 10277){
+
+        if (idActual < 1 || idActual > 10277) {
             boton.isEnabled = true
             return
         }
 
-
-        if(idActual == 1026 )
-            idActual = 10001 //El ultimo pokemon de la pokedex tiene id 1025,
-                            //pero la api usa como id > 10000 para pokemones especiales
+        if (idActual == 1026) {
+            idActual = 10001
+        }
 
         val intent = Intent(this, PokeDetallesActivity::class.java)
 
-        api.getPokemonPorId(idActual.toLong()).enqueue(object: Cb<PokemonDTO>{
-            override fun onResponse(call: Call<PokemonDTO>, response: Response<PokemonDTO>) {
-                if(response.isSuccessful) {
-                    val pokemon = response.body()
-                    intent.putExtra("id", pokemon!!.id) //Int
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val pokemon = api.getPokemonPorId(idActual.toLong())
+
+                withContext(Dispatchers.Main) {
+                    intent.putExtra("id", pokemon.id) // Int
                     intent.putExtra("nombre", pokemon.name)
                     intent.putExtra("tipo", pokemon.types.toString())
                     intent.putExtra("movimientos", pokemon.moves.toString())
                     intent.putExtra("habilidades", pokemon.abilities.toString())
-                    intent.putExtra("peso", pokemon.weight) //Int
-                    intent.putExtra("altura", pokemon.height) //Int
-                    intent.putExtra(
-                        "sprites",
-                        pokemon.sprites.toString()
-                    ) //Son urls en un string delimitadas por ', '
-                    intent.putExtra("gritos", pokemon.cries.toString()) //Lo mismo aca
+                    intent.putExtra("peso", pokemon.weight) // Int
+                    intent.putExtra("altura", pokemon.height) // Int
+                    intent.putExtra("sprites", pokemon.sprites.toString()) // URLs en un string delimitadas por ', '
+                    intent.putExtra("gritos", pokemon.cries.toString()) // Lo mismo acá
                     startActivity(intent)
                     finish()
+                    boton.isEnabled = true
                 }
-                else {
-                    Log.e(
-                        "API_ERROR",
-                        "Error en la llamada getPokemonPorUrl: ${response.message()}"
-                    )
+            } catch (e: Exception) {
+                // Manejo de errores
+                withContext(Dispatchers.Main) {
+                    boton.isEnabled = true
+                    Log.e("API_ERROR", "Error en la llamada getPokemonPorId: ${e.message}")
                 }
-                boton.isEnabled = true
             }
-
-            override fun onFailure(call: Call<PokemonDTO>, t: Throwable) {
-                boton.isEnabled = true
-                Log.e("API_ERROR", "Error en la llamada getPokemonPorUrl: ${t.message}")
-            }
-
-        })
-
+        }
     }
 
     private fun cambiarSprite(spriteRequerida: Int, frente: ImageView, espalda: ImageView, spriteUrls: List<String>) {
@@ -218,4 +222,23 @@ class PokeDetallesActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun reproducirGrito(url: String) {
+        CoroutineScope(Dispatchers.Main).launch {
+            mediaPlayer?.release()
+
+            mediaPlayer = MediaPlayer().apply {
+                setDataSource(url)
+                setOnPreparedListener {
+                    start()
+                }
+                setOnErrorListener { _, _, _ ->
+
+                    false
+                }
+                prepareAsync()
+            }
+        }
+    }
 }
+

@@ -4,18 +4,18 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface IPokemonApi {
+
     @GET("pokemon/{nombre}")
-    fun getPokemonPorNombre(@Path("nombre") nombre: String) : Call<PokemonDTO>
+    suspend fun getPokemonPorNombre(@Path("nombre") nombre: String) : PokemonDTO
 
     @GET("pokemon/{id}")
-    fun getPokemonPorId(@Path("id") id: Long): Call<PokemonDTO>
+    suspend fun getPokemonPorId(@Path("id") id: Long): PokemonDTO
 
     @GET("pokemon")
-    fun getPokemonPorIdEnRango(
+    suspend fun getPokemonPorIdEnRango(
         @Query("offset") inicio: Int,
-        @Query("limit") cantidadAObtener: Int) : Call<ResultadoDTO>
+        @Query("limit") cantidadAObtener: Int) : ResultadoDTO
 
     @GET
-    fun getPokemonPorUrl(@Url url: String): Call<PokemonDTO>
-
+    suspend fun getPokemonPorUrl(@Url url: String): PokemonDTO
 }

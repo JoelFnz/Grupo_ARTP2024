@@ -26,7 +26,9 @@ import com.example.grupoar_tp2024.apiRest.RetrofitClient
 import com.example.grupoar_tp2024.recycleView.PokemonAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -63,57 +65,37 @@ class MainActivity : AppCompatActivity() {
         pokemonAdapter = PokemonAdapter(ArrayList(), this)
         rvPokemones.adapter = pokemonAdapter
 
-        btnSiguiente.isEnabled =  false
+        btnSiguiente.isEnabled = false
         btnAnterior.isEnabled = true
 
         var valorInicio = 0
 
-        Thread {
-            getPokemonesPorIdEnRango(valorInicio, 50, btnSiguiente) { pokemons ->
-                runOnUiThread {
+        getPokemonesPorIdEnRango(valorInicio, 50, btnSiguiente) { pokemons ->
+            pokemonAdapter.updateData(pokemons)
+        }
+
+        btnSiguiente.setOnClickListener {
+            if (valorInicio < 1300) {
+                btnSiguiente.isEnabled = false
+                if (valorInicio == 0)
+                    btnAnterior.isEnabled = true
+                valorInicio += 50
+                getPokemonesPorIdEnRango(valorInicio, 50, btnSiguiente) { pokemons ->
                     pokemonAdapter.updateData(pokemons)
                 }
             }
-        }.start()
-
-        btnSiguiente.setOnClickListener {
-            Thread {
-                if (valorInicio < 1300) {
-                    runOnUiThread {
-                        btnSiguiente.isEnabled = false
-                        if (valorInicio == 0)
-                            btnAnterior.isEnabled = true
-                    }
-
-                    valorInicio += 50
-                    getPokemonesPorIdEnRango(valorInicio, 50, btnSiguiente) { pokemons ->
-                        runOnUiThread {
-                            pokemonAdapter.updateData(pokemons)
-                        }
-                    }
-                }
-            }.start()
         }
 
         btnAnterior.setOnClickListener {
-            Thread {
-                if (valorInicio > 0) {
-                    runOnUiThread {
-                        btnAnterior.isEnabled = false
-                        btnSiguiente.isEnabled = true
-                    }
-
-                    valorInicio -= 50
-
-                    getPokemonesPorIdEnRango(valorInicio, 50, btnAnterior) { pokemons ->
-                        runOnUiThread {
-                            pokemonAdapter.updateData(pokemons)
-                        }
-                    }
+            if (valorInicio > 0) {
+                btnAnterior.isEnabled = false
+                valorInicio -= 50
+                btnSiguiente.isEnabled = true
+                getPokemonesPorIdEnRango(valorInicio, 50, btnAnterior) { pokemons ->
+                    pokemonAdapter.updateData(pokemons)
                 }
-            }.start()
+            }
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -144,44 +126,45 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun getPokemonesPorIdEnRango(desde: Int, hasta: Int, boton: Button, callback: (MutableList<PokemonDTO>) -> Unit) {
-        val listaPokemon: MutableList<PokemonDTO> = ArrayList()
-        Thread {
+    private fun getPokemonesPorIdEnRango(
+        desde: Int,
+        hasta: Int,
+        boton: Button,
+        callback: (MutableList<PokemonDTO>) -> Unit
+    ) {
+        boton.isEnabled = false
+
+        CoroutineScope(Dispatchers.IO).launch {
             try {
-                val resultados = api.getPokemonPorIdEnRango(desde, hasta).execute()
+                val resultados = api.getPokemonPorIdEnRango(desde, hasta)
 
-                if (resultados.isSuccessful) {
-                    val cantidadResultados = resultados.body()?.results?.size ?: 0
-                    val requests = resultados.body()?.results?.map { r -> api.getPokemonPorUrl(r.url).execute() }
+                val listaPokemon: MutableList<PokemonDTO> = mutableListOf()
 
-                    requests?.forEach { response ->
-                        if (response.isSuccessful) {
-                            listaPokemon.add(response.body()!!)
-                        }
-                    }
-
-
-                    runOnUiThread {
-                        boton.isEnabled = true
-                        callback(listaPokemon)
-                    }
-                } else {
-                    runOnUiThread {
-                        boton.isEnabled = true
-                        Log.e("API_ERROR", "Error en la llamada: ${resultados.message()}")
-                    }
+                val requests = resultados.results.map { r ->
+                    async { api.getPokemonPorUrl(r.url) }
                 }
-            } catch (e: Exception) {
-                runOnUiThread {
+
+                for (request in requests) {
+                    listaPokemon.add(request.await())
+                }
+
+                withContext(Dispatchers.Main) {
+                    callback(listaPokemon)
                     boton.isEnabled = true
-                    Log.e("API_ERROR", "Error: ${e.message}")
+                }
+
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    boton.isEnabled = true
+                    Log.e("getPokemonesPorIdEnRango", "Error al obtener Pokémon: ${e.message}")
                 }
             }
-        }.start()
+        }
     }
 
 
-    private fun saludarUsuario() {
+
+                        private fun saludarUsuario() {
         val bundle: Bundle? = intent.extras
         if (bundle != null) {
             val nombreUsuario = bundle?.getString(resources.getString(R.string.nombre_usuario))
