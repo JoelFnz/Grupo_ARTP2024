@@ -66,10 +66,7 @@ class Login : AppCompatActivity() {
         //PERMISO DEL USUARIO PARA LAS NOTIFICACIONES
         checkNotificationPermission()
 
-        //Toolbar
-        val toolbar: Toolbar =findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar!!.title= resources.getString(R.string.titulo)
+
         //Layout
         val btnIngresar: Button = findViewById(R.id.btnIngresar)
         val btnRegistrarme: Button = findViewById(R.id.btnRegistrarme)

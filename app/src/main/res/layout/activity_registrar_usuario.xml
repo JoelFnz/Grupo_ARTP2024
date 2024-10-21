@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.RegistrarUsuario"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/background_many">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,10 +15,7 @@
         android:orientation="vertical"
         >
 
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/toolbarprimary_layout"
-            />
+
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -35,14 +33,16 @@
                 android:id="@+id/mailTextView"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:text="Correo electrónico" />
+                android:text="Correo electrónico"
+                android:textColor="@color/white"/>
 
             <EditText
                 android:id="@+id/mailTextEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
-                android:hint="Ingresar correo electrónico" />
+                android:hint="Ingresar correo electrónico"
+                android:textColor="@color/white"/>
 
             <Space
                 android:layout_width="wrap_content"
@@ -54,7 +54,8 @@
                 android:id="@+id/passTextView"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:text="Contraseña" />
+                android:text="Contraseña"
+                android:textColor="@color/white"/>
 
             <EditText
                 android:id="@+id/passTextEdit"
@@ -73,7 +74,8 @@
                 android:id="@+id/pass2TextView"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:text="Confirmar contraseña" />
+                android:text="Confirmar contraseña"
+                android:textColor="@color/white"/>
 
             <EditText
                 android:id="@+id/pass2TextEdit"
@@ -81,7 +83,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:textSize="15sp"
-                android:hint="Vuelva a ingresar la contraseña" />
+                android:hint="Vuelva a ingresar la contraseña"
+                android:textColor="@color/white"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -108,13 +111,16 @@
             android:text="Acepta los Términos y condiciones"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@color/white"
+            />
         <TextView
             android:id="@+id/terminos_condiciones"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Términos y condiciones"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:textColor="@color/white"/>
 
     </LinearLayout>
 

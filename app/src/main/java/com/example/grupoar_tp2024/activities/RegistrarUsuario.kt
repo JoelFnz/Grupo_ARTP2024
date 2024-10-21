@@ -36,9 +36,7 @@ class RegistrarUsuario : AppCompatActivity() {
         //BD
         val baseDeDatos = AppDatabase.getDatabase(applicationContext)
         //Toolbar
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar!!.title= resources.getString(R.string.titulo)
+
 
         btnRegister.setOnClickListener {
             val mail = etMail.text.toString()

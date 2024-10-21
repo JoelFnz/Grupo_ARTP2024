@@ -50,7 +50,9 @@ class PokeDetallesActivity : AppCompatActivity() {
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar!!.title= resources.getString(R.string.titulo)
+        supportActionBar?.title = ""
+
+
 
         val txtNombre: TextView = findViewById(R.id.txtNombre)
         val etId: TextView = findViewById(R.id.etId)

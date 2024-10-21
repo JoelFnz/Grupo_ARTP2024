@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
 
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar!!.title = resources.getString(R.string.titulo)
+        supportActionBar?.title = ""
 
         rvPokemones = findViewById(R.id.rvListaPokemones)
         pokemonAdapter = PokemonAdapter(ArrayList(), this)
