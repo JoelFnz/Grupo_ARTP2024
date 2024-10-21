@@ -5,7 +5,7 @@ import com.squareup.moshi.JsonClass
 //ESTA CLASE ES LA IMPORTANTE.
 @JsonClass (generateAdapter = true)
 data class PokemonDTO(
-    val name: String,
+    var name: String,
     val id: Int,
     val weight: Int,
     val height: Int,

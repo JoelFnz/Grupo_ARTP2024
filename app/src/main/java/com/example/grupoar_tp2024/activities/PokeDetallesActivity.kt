@@ -65,11 +65,11 @@ class PokeDetallesActivity : AppCompatActivity() {
         val txtAltura: TextView = findViewById(R.id.altura)
         val btnSonido: Button = findViewById(R.id.sonido)
 
-        txtNombre.text = intent.getStringExtra("nombre")
+        txtNombre.text = intent.getStringExtra("nombre")?.replaceFirstChar { it.uppercase() }
         etId.text = "ID: ${intent.getIntExtra("id", -1)}"
-        txtTipo.text = intent.getStringExtra("tipo")
-        txtMovimiento.text = intent.getStringExtra("movimientos")
-        txtHabilidades.text = intent.getStringExtra("habilidades")
+        txtTipo.text = intent.getStringExtra("tipo")?.replaceFirstChar { it.uppercase() }
+        txtMovimiento.text = intent.getStringExtra("movimientos")?.replaceFirstChar { it.uppercase() }
+        txtHabilidades.text = intent.getStringExtra("habilidades")?.replaceFirstChar { it.uppercase() }
         txtPeso.text = txtPeso.text.toString() + (intent.getIntExtra("peso", -1).toFloat() / 10) + " kg"
         txtAltura.text = txtAltura.text.toString() + (intent.getIntExtra("altura", -1).toFloat() / 10) + " m"
         //txtRegion.text = region

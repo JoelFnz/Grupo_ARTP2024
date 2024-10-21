@@ -145,7 +145,10 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 for (request in requests) {
-                    listaPokemon.add(request.await())
+                    val pokemon = request.await()
+                    // Capitaliza el nombre del Pokémon
+                    pokemon.name = pokemon.name.replaceFirstChar { it.uppercase() }
+                    listaPokemon.add(pokemon)
                 }
 
                 withContext(Dispatchers.Main) {
