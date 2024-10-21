@@ -18,4 +18,7 @@ interface IPokemonApi {
 
     @GET
     suspend fun getPokemonPorUrl(@Url url: String): PokemonDTO
+
+    @GET("type/{tipo}")
+    fun  getTipo(@Path("tipo") tipo: String): Call<TipoDTO>
 }

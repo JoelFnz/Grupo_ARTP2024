@@ -66,7 +66,7 @@ data class Ability(
     val url: String
 ){
     override fun toString(): String {
-        return name
+        return name.replaceFirstChar { it.uppercaseChar() }
     }
 }
 
@@ -80,7 +80,7 @@ data class AbilityDetails(
         if(is_hidden)
             retorno += "(Oculta) " // oculta
 
-        return retorno + ability.toString()
+        return retorno + ability
     }
 }
 
@@ -99,7 +99,7 @@ data class Move(
     val url: String
 ) {
     override fun toString(): String {
-        return name
+        return name.replaceFirstChar { it.uppercaseChar() }
     }
 }
 

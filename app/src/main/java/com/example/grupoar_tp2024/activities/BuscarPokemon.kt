@@ -125,7 +125,7 @@ class BuscarPokemon : AppCompatActivity() {
             txtResultados.visibility = View.VISIBLE
             txtPokemonResultado.visibility = View.VISIBLE
             txtResultados.text = "Resultados: "
-            txtPokemonResultado.text = "Nombre: ${pokemon.name}    ID: ${pokemon.id}"
+            txtPokemonResultado.text = "Nombre: ${pokemon.name.replaceFirstChar { it.uppercase() }}    ID: ${pokemon.id}"
             btnVerPokemon.visibility = View.VISIBLE
             btnVerPokemon.isEnabled = true
         }
@@ -135,5 +135,6 @@ class BuscarPokemon : AppCompatActivity() {
         txtResultados.visibility = View.VISIBLE
         txtPokemonResultado.visibility = View.INVISIBLE
         txtResultados.text = mensaje
+        btnVerPokemon.visibility = View.INVISIBLE
     }
 }

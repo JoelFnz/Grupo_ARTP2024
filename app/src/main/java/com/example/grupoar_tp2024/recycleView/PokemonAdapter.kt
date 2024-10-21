@@ -2,27 +2,35 @@ package com.example.grupoar_tp2024.recycleView
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.grupoar_tp2024.R
 import com.example.grupoar_tp2024.activities.PokeDetallesActivity
+import com.example.grupoar_tp2024.apiRest.IPokemonApi
 import com.example.grupoar_tp2024.apiRest.PokemonDTO
+import com.example.grupoar_tp2024.apiRest.RetrofitClient
+import com.example.grupoar_tp2024.apiRest.TipoDTO
+import com.squareup.picasso.Picasso
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class PokemonAdapter(var pokemones:MutableList<PokemonDTO>, var context:Context):
     RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() {
     class PokemonViewHolder(view: View): RecyclerView.ViewHolder(view){
         var txtIDPoke: TextView
         var txtNombrePoke: TextView
-        var txtTipoPoke: TextView
+        var txtTipos: TextView
 
         init {
             txtIDPoke = view.findViewById(R.id.tv_idPoke)
             txtNombrePoke = view.findViewById(R.id.tv_nombrePoke)
-            txtTipoPoke = view.findViewById(R.id.tv_tipoPoke)
-
+            txtTipos = view.findViewById(R.id.tv_tipos)
         }
 
     }
@@ -42,8 +50,8 @@ class PokemonAdapter(var pokemones:MutableList<PokemonDTO>, var context:Context)
         holder.txtNombrePoke.text= item.name
         var textTipos = ""
         for(typeSlot in item.types)
-            textTipos += "${typeSlot.type.name} "
-        holder.txtTipoPoke.text= textTipos
+            textTipos += " ${typeSlot.type.name.replaceFirstChar { it.uppercase() }} "
+        holder.txtTipos.text = textTipos
 
         holder.itemView.setOnClickListener{
             val intent = Intent(context, PokeDetallesActivity::class.java)
@@ -69,7 +77,6 @@ class PokemonAdapter(var pokemones:MutableList<PokemonDTO>, var context:Context)
         pokemones.sortBy { it.id }
         notifyDataSetChanged()  // Notifica que los datos han cambiado
     }
-
 
 }
 

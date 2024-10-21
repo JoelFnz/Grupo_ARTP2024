@@ -7,6 +7,7 @@ import android.media.Image
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -19,6 +20,7 @@ import com.example.grupoar_tp2024.R
 import com.example.grupoar_tp2024.apiRest.IPokemonApi
 import com.example.grupoar_tp2024.apiRest.PokemonDTO
 import com.example.grupoar_tp2024.apiRest.RetrofitClient
+import com.example.grupoar_tp2024.apiRest.TipoDTO
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -29,6 +31,7 @@ import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback as Cb
 import retrofit2.Response
+
 
 
 class PokeDetallesActivity : AppCompatActivity() {
@@ -56,7 +59,6 @@ class PokeDetallesActivity : AppCompatActivity() {
 
         val txtNombre: TextView = findViewById(R.id.txtNombre)
         val etId: TextView = findViewById(R.id.etId)
-        val txtTipo: TextView = findViewById(R.id.txtTipo)
         val txtMovimiento: TextView = findViewById(R.id.txtMovimiento)
         val txtHabilidades: TextView = findViewById(R.id.txtHabilidades)
         val btnSiguiente: Button = findViewById(R.id.siguiente)
@@ -88,7 +90,6 @@ class PokeDetallesActivity : AppCompatActivity() {
 
         txtNombre.text = intent.getStringExtra("nombre")?.replaceFirstChar { it.uppercase() }
         etId.text = "ID: ${intent.getIntExtra("id", -1)}"
-        txtTipo.text = tipos
         txtMovimiento.text = movimientos
         txtHabilidades.text = habilidades
         txtPeso.text = txtPeso.text.toString() + (intent.getIntExtra("peso", -1).toFloat() / 10) + " kg"
@@ -97,6 +98,12 @@ class PokeDetallesActivity : AppCompatActivity() {
         val imgFront: ImageView = findViewById(R.id.img_pokemon_sprite_front)
         val imgBack: ImageView = findViewById(R.id.img_pokemon_sprite_back)
         val sprites = intent.getStringExtra("sprites")
+
+        val imgTipo1: ImageView = findViewById(R.id.img_tipo1)
+        val imgTipo2: ImageView = findViewById(R.id.img_tipo2)
+
+        if(tipos != null)
+            cargarSpriteTipo(tipos, imgTipo1, imgTipo2)
 
         if(intent.getIntExtra("id", -1) > 1){
             btnAnterior.isEnabled = true
@@ -258,6 +265,47 @@ class PokeDetallesActivity : AppCompatActivity() {
                 }
                 prepareAsync()
             }
+        }
+    }
+
+    private fun cargarSpriteTipo(strTipos: String, tipo1: ImageView, tipo2: ImageView){
+        val listaTipos = strTipos.split(",").map { it.trim() }
+
+        if(listaTipos.isEmpty())
+            return
+
+        var tipoActual = api.getTipo(listaTipos[0])
+        tipoActual.enqueue(object: Cb<TipoDTO>{
+            override fun onResponse(call: Call<TipoDTO>, response: Response<TipoDTO>) {
+                if(response.isSuccessful){
+                    Picasso.get().load(response.body()?.sprites?.generationVII?.swordAndShield?.icono).into(tipo1)
+                } else
+                Log.e("API_ERROR" ,"Error de red: ${response.message()}")
+            }
+
+            override fun onFailure(call: Call<TipoDTO>, t: Throwable) {
+                Log.e("API_ERROR" ,"Error de red: ${t.message}")
+            }
+
+        })
+
+        if(listaTipos.size > 1){
+            tipoActual = api.getTipo(listaTipos[1])
+            tipoActual.enqueue(object: Cb<TipoDTO>{
+                override fun onResponse(call: Call<TipoDTO>, response: Response<TipoDTO>) {
+                    if(response.isSuccessful){
+                        Picasso.get().load(response.body()?.sprites?.generationVII?.swordAndShield?.icono).into(tipo2)
+                    } else
+                        Log.e("API_ERROR" ,"Error de red: ${response.message()}")
+                }
+
+                override fun onFailure(call: Call<TipoDTO>, t: Throwable) {
+                    Log.e("API_ERROR" ,"Error de red: ${t.message}")
+                }
+
+            })
+        } else {
+            tipo2.visibility = View.GONE //Matamos la view porque no nos sirve
         }
     }
 }
