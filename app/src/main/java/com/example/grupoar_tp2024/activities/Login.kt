@@ -33,6 +33,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import android.Manifest
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
@@ -60,6 +61,8 @@ class Login : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+
+
         }
 
         //CANAL DE NOTIFICACIONES
@@ -81,6 +84,9 @@ class Login : AppCompatActivity() {
         val usuarioGuardado = preferencias.getString(resources.getString(R.string.nombre_usuario), "")
         val passwordGuardado = preferencias.getString(resources.getString(R.string.password_usuario), "")
         val txtEspecial: TextView = findViewById(R.id.rickroll)
+
+       //LLLAMO A LIBERAR SHARED PREFERENCES (TESTO LOGIN)
+        liberarCredenciales(preferencias)
 
 
         //Cargar el tema elegido por el usuario. Por defecto se usa modo noche porque soy darks U_U
@@ -187,6 +193,11 @@ class Login : AppCompatActivity() {
                 requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_CODE)
             }
         }
+    }
+//LIBERADOR SHARED PREFERECES (TESTEO LOGIN)
+    private fun liberarCredenciales(preferencias: SharedPreferences) {
+        preferencias.edit().clear().apply() // Libero shared preferences
+
     }
 
 }
