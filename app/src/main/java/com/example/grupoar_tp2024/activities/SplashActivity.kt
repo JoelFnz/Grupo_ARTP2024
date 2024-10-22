@@ -26,7 +26,7 @@ class SplashActivity : AppCompatActivity() {
         val logoImageView = findViewById<ImageView>(R.id.logoImageView)
         Handler().postDelayed({
             playAnimation(logoImageView) //Doy arranque a animacion
-        }, delayMillis) //Demoro los 2 segundos antes de animacion
+        }, delayMillis) //Demoro los 0.7 segundos antes de animacion
     }
 
 

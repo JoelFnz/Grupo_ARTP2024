@@ -9,6 +9,6 @@
         android:id="@+id/logoImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/logo_solo" /> <!-- Cambia esto al nombre de tu logo -->
+        android:src="@drawable/logo_solo" />
 
 </RelativeLayout>

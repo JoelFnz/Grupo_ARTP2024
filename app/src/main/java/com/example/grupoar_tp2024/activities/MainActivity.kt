@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var rvPokemones: RecyclerView
     lateinit var pokemonAdapter: PokemonAdapter
     lateinit var toolbar: Toolbar
-
+    private var mediaPlayer: MediaPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -190,30 +190,26 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun mostrarConfiguracion(view : View){
+    private fun mostrarConfiguracion(view: View) {
         val popup = PopupMenu(this, view)
         popup.menuInflater.inflate(R.menu.popup_menu_configuracion, popup.menu)
         popup.gravity = Gravity.END
         popup.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-
                 R.id.saludar -> {
                     saludarUsuario()
-                    CoroutineScope(Dispatchers.Main).launch {
-                        // Si hay un MediaPlayer existente lo liberamos
 
-                        val mediaPlayer = MediaPlayer().apply {
-                            setDataSource("https://s19.aconvert.com/convert/p3r68-cdx67/i9ci3-cyciz.mp3")
-                            setOnPreparedListener {
-                                start()
-                            }
-                            setOnErrorListener { _, _, _ ->
+                    // Usamos MediaPlayer.create para crear y reproducir
+                    mediaPlayer?.release() // Liberamos el MediaPlayer anterior si existe
+                    mediaPlayer = MediaPlayer.create(this, R.raw.pikachu_saludo)
 
-                                false
-                            }
-                            prepareAsync()
-                        }
+                    mediaPlayer?.setOnCompletionListener {
+                        it.release() // Liberamos recursos después de terminar
+                        mediaPlayer = null // Limpiamos la referencia
                     }
+
+                    mediaPlayer?.start() // Iniciamos la reproducción
+
                     true
                 }
                 R.id.cambiarTema -> {
@@ -222,7 +218,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.cerrarSesion -> {
                     Toast.makeText(this, "Cerrando sesión...", Toast.LENGTH_SHORT).show()
-                    //LIBERADOR RECORDAR USUARIO
                     val preferenciasLimpiar = getSharedPreferences(resources.getString(R.string.sp_credenciales), MODE_PRIVATE)
                     with(preferenciasLimpiar.edit()) {
                         clear()
@@ -237,7 +232,10 @@ class MainActivity : AppCompatActivity() {
         }
         popup.show()
     }
-
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer?.release()
+    }
     private fun cambiarAModoNoche(){
         val preferencias = getSharedPreferences("app_preferences", MODE_PRIVATE)
         if(!preferencias.getBoolean("dark_mode", false)){
