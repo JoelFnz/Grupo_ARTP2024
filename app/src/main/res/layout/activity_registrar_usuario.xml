@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".activities.RegistrarUsuario"
     android:orientation="vertical"
-    android:background="@drawable/background_many">
+    android:background="@drawable/background_many_recorta">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,6 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:text="Correo electrónico"
+                android:textSize="23dp"
                 android:textColor="@color/white"/>
 
             <EditText
@@ -42,7 +43,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
                 android:hint="Ingresar correo electrónico"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:textColorHint="@color/whiteTraslu"/>
 
             <Space
                 android:layout_width="wrap_content"
@@ -55,6 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:text="Contraseña"
+                android:textSize="23dp"
                 android:textColor="@color/white"/>
 
             <EditText
@@ -63,7 +66,9 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:textSize="15sp"
-                android:hint="Ingresar contraseña" />
+                android:hint="Ingresar contraseña"
+                android:textColor="@color/white"
+                android:textColorHint="@color/whiteTraslu"/>
 
 
             <Space
@@ -73,6 +78,7 @@
             <TextView
                 android:id="@+id/pass2TextView"
                 android:layout_width="match_parent"
+                android:textSize="23dp"
                 android:layout_height="40dp"
                 android:text="Confirmar contraseña"
                 android:textColor="@color/white"/>
@@ -84,7 +90,8 @@
                 android:inputType="textPassword"
                 android:textSize="15sp"
                 android:hint="Vuelva a ingresar la contraseña"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:textColorHint="@color/whiteTraslu"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -113,6 +120,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/white"
+
             />
         <TextView
             android:id="@+id/terminos_condiciones"

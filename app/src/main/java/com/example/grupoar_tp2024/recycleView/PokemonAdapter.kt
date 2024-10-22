@@ -20,39 +20,38 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PokemonAdapter(var pokemones:MutableList<PokemonDTO>, var context:Context):
+class PokemonAdapter(var pokemones: MutableList<PokemonDTO>, var context: Context) :
     RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() {
-    class PokemonViewHolder(view: View): RecyclerView.ViewHolder(view){
-        var txtIDPoke: TextView
-        var txtNombrePoke: TextView
-        var txtTipos: TextView
 
-        init {
-            txtIDPoke = view.findViewById(R.id.tv_idPoke)
-            txtNombrePoke = view.findViewById(R.id.tv_nombrePoke)
-            txtTipos = view.findViewById(R.id.tv_tipos)
-        }
-
+    class PokemonViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        var txtIDPoke: TextView = view.findViewById(R.id.tv_idPoke)
+        var txtNombrePoke: TextView = view.findViewById(R.id.tv_nombrePoke)
+        var txtTipos: TextView = view.findViewById(R.id.tv_tipos)
+        var ivSprite: ImageView = view.findViewById(R.id.iv_sprite) // Agregar el ImageView
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
-
-        val view = LayoutInflater.from(parent.context).
-        inflate(R.layout.item_pokemones, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_pokemones, parent, false)
         return PokemonViewHolder(view)
     }
 
-    override fun getItemCount()= pokemones.size
+    override fun getItemCount() = pokemones.size
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
-        val item= pokemones.get(position)
-        holder.txtIDPoke.text= item.id.toString()
-        holder.txtNombrePoke.text= item.name
+        val item = pokemones[position]
+        holder.txtIDPoke.text = item.id.toString()
+        holder.txtNombrePoke.text = item.name
+
+        // Cargar los tipos
         var textTipos = ""
-        for(typeSlot in item.types)
+        for (typeSlot in item.types)
             textTipos += " ${typeSlot.type.name.replaceFirstChar { it.uppercase() }} "
         holder.txtTipos.text = textTipos
 
+        // Cargar el sprite
+        val spriteUrl = item.sprites.front_default // URL del sprite frontal
+        Picasso.get().load(spriteUrl).into(holder.ivSprite) // Cargar la imagen
         holder.itemView.setOnClickListener{
             val intent = Intent(context, PokeDetallesActivity::class.java)
 

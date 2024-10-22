@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".activities.Login"
     android:orientation="vertical"
-    android:background="@drawable/background_many">
+    android:background="@drawable/background_many_recorta">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,10 +40,13 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_gravity="center"
+            android:textSize="13dp"
             android:hint="ejemplo@email.com"
             android:inputType="textEmailAddress"
             android:id="@+id/etEmail"
             android:textColor="@color/white"
+
+            android:textColorHint="@color/whiteTraslu"
             />
 
         <TextView
@@ -59,10 +62,13 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_gravity="center"
-            android:hint="contraseña"
+            android:textSize="13dp"
+            android:hint="escriba su contraseña"
             android:inputType="textPassword"
             android:id="@+id/etContraseña"
             android:textColor="@color/white"
+
+            android:textColorHint="@color/whiteTraslu"
             />
 
         <CheckBox

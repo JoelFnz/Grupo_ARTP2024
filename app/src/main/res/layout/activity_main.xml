@@ -13,55 +13,46 @@
         layout="@layout/toolbarprimary_layout"
         />
 
-    <TextView
+    <ImageView
         android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:src="@drawable/unladex_titulo"
         android:layout_gravity="center"
-        android:layout_height="wrap_content"
-        android:text="Lista de Pokemones!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        ></ImageView>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvListaPokemones"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_pokemones"
+        android:fastScrollEnabled="true"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        >
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <Button
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="48dp"
             android:id="@+id/anterior"
             android:text="Anterior"
             android:textSize="15sp"
             android:layout_weight="1"
-            android:layout_margin="5dp"
-            />
+            android:layout_margin="5dp"/>
 
         <Button
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="48dp"
             android:id="@+id/siguiente"
             android:text="Siguiente"
             android:textSize="15sp"
             android:layout_weight="1"
-            android:layout_margin="5dp"
-            />
-
-
+            android:layout_margin="5dp"/>
     </LinearLayout>
-
-    <!-- recycleView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvListaPokemones"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_pokemones"
-        android:fastScrollEnabled="true"
-        >
-
-    </androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>
